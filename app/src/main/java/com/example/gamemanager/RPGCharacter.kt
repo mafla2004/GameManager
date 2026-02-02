@@ -1,15 +1,19 @@
 package com.example.gamemanager
 
 open class RPGCharacter(
-    private val component: Character,
-    private var maxHealth: UInt,
-    private var curHealth: UInt,
-    private var owner:     String
-): GameCharacter(component, maxHealth)
+    ownerProject:               Project,
+    name:                       String,
+    species:                    String,
+    birth:                      String,
+    age:                        String,
+    maxHealth:                  UInt,
+    private var curHealth:      UInt,
+    private var owner:          String
+): GameCharacter(ownerProject, name, species, birth, age, maxHealth)
 {
-    constructor(component: Character, maxHealth: UInt, owner: String): this(component, maxHealth, maxHealth, owner)
-    constructor(component: Character, owner: String): this(component, 10U, owner)
-    constructor(component: Character): this(component, "Unspecified")
+    constructor(ownerProject: Project, name: String, species: String, birth: String, age: String, maxHealth: UInt, owner: String): this(ownerProject, name, species, birth, age, maxHealth, maxHealth, owner)
+    constructor(ownerProject: Project, name: String, species: String, birth: String, age: String, owner: String): this(ownerProject, name, species, birth, age, 10U, owner)
+    constructor(ownerProject: Project, name: String, species: String, birth: String, age: String): this(ownerProject, name, species, birth, age, "Unspecified")
 
     public fun getCurrentHealth(): UInt = curHealth
 

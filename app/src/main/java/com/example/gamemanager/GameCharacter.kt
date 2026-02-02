@@ -1,11 +1,15 @@
 package com.example.gamemanager
 
 open class GameCharacter(
-    private val component: Character,
-    private var maxHealth: UInt
-): CharacterDecorator(component)
+    ownerProject:               Project,
+    name:                       String,
+    species:                    String,
+    birth:                      String,
+    age:                        String,
+    private var maxHealth:      UInt
+): Character(ownerProject, name, species, birth, age)
 {
-    constructor(component: Character): this(component, 100U)
+    constructor(ownerProject: Project, name: String, species: String, birth: String, age: String): this(ownerProject, name, species, birth, age, 100U)
 
     public fun getMaxHealth(): UInt = maxHealth
 
