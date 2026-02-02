@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GameManager">
         <activity
+            android:name=".NewProjectDialogActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:exported="false" />
+        <activity
             android:name=".ProjectManagerActivity"
             android:exported="false" />
         <activity
