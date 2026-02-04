@@ -1,13 +1,16 @@
 package com.example.gamemanager
 
-class Project(private var Name: String = "New Project", private var Description: String = "Project Description") : Serializeable()
+class Project(private var Name: String = "New Project", private var Description: String = "Project Description") : Jsonable()
 {
+    private var characters: MutableSet<Character> = mutableSetOf()
+
     init
     {
 
     }
 
-    override fun save() = false         // TODO: Implement
-    override fun wipe() {}              // TODO: Implement
-    override fun isMemorized() = false  // TODO: Implement
+    override fun toJson(): String
+    {
+
+    }
 }
