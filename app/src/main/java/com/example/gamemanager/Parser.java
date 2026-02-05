@@ -23,6 +23,7 @@ public class Parser
     public static final String ENDL = ",\n";
     public static final String JSON_ENTRY_TAB = "\t\t";
 
+    public static final int DONT_USE_TABS = -1;
     public static final int ENTRY_PREDICTED_SIZE = 127;
     public static final int LIBRARY_PREDICTED_SIZE = 2048; // 2kB
 
@@ -36,7 +37,7 @@ public class Parser
         String format = formatted ? JSON_ENTRY_TAB : "";
         String ret = format + "{" + NLN;
 
-        ret += v.toJson(formatted);
+        ret += v.toJson(formatted ? 1 : DONT_USE_TABS);
 
         ret += format + "}";
 
