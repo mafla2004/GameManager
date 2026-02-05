@@ -6,7 +6,7 @@ open class Character(
     private var species:        String,
     private var birth:          String,     // May not be a standard date, e.g.: "Imperial period, 5th year"
     private var age:            String      // May not be a simple integer, e.g.: "Unknown" or "40 millennia" or "Older than you"
-): Jsonable()
+)
 {
 
     init
