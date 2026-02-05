@@ -18,9 +18,20 @@ class Project(private var Name: String = "New Project", private var Description:
                 tabs += '\t'
             }
 
-        var ret: String = tabs + "\"type\":\"Project\",\n\"subtype\":\"none\",\n"
+        var ret: String = "{\n$tabs\"type\":\"Project\",\n$tabs\"subtype\":\"$SUBTYPE_NONE\",\n"
 
-        // TODO: Make a function that automatically writes out attributes
+        ret += "$tabs\"name\":\"$Name\",\n\"description\":\"$Description\",\n"
+        ret += tabs +"\"characters:\"[\n"
+
+        for (c: Character in characters)
+        {
+            ret += c.toJson(if (tabNum != Parser.DONT_USE_TABS) tabNum + 1 else tabNum) + ",\n"
+        }
+        ret += "$tabs],\n"
+
+        // As always, imposter syndrome is chiming in telling me this is the worst piece of software mankind ever made
+
+
 
         return ret
     }

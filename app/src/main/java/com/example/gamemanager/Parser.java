@@ -48,7 +48,7 @@ public class Parser
     {
         StringBuilder result = new StringBuilder(LIBRARY_PREDICTED_SIZE);
 
-        result.append("{\n\t\"project\": [\n");
+        //result.append("{\n\t\"project\": [\n"); Don't know what I was doing here, I have anxiety
 
         int i = 0;
         for (Jsonable v : lib)
@@ -57,7 +57,7 @@ public class Parser
             i++;
         }
 
-        result.append("\t]\n}");
+        //result.append("\t]\n}");
 
         return result.toString();
     }
@@ -72,16 +72,20 @@ public class Parser
             return null;
         }
 
+        Jsonable ret;
         //Jsonable ret = new Jsonable(); Implement factory pattern maybe?
         StringTokenizer tokenizer = new StringTokenizer(json, ":\"\t\n", false);
 
         boolean beganEntry 		= false;
         boolean awaitFieldType 	= true;
+        boolean awaitObjType    = true;             // Type and subtype tell us which kind of class we're working on
+        boolean awaitSubType    = true;
         boolean metEnd			= false;
         boolean skipTkn			= false;
         //boolean awaitColon 		= false;		// MIGHT be unnecessary
         String field = "";
         String token = "";
+        String obj = "";
         while (tokenizer.hasMoreTokens())
         {
             if (skipTkn)
@@ -100,7 +104,8 @@ public class Parser
             {
                 if (beganEntry)
                 {
-                    throw new InvalidJsonEntryException("Unexpected \'{\' found");
+                    // We already began the entry, we're entering a subobject
+
                 }
                 beganEntry = true;
                 continue;
@@ -157,6 +162,41 @@ public class Parser
             }
             switch (field)
             {
+                case "type":    // Field specifies type
+                    if (!awaitObjType)
+                    {
+                        throw new InvalidJsonEntryException("Object type defined more than once");
+                    }
+
+                    obj = token;
+
+                    awaitObjType = false;
+
+                    break;
+                case "subtype":
+                    if (!awaitSubType)
+                    {
+                        throw new InvalidJsonEntryException("Object subtype defined more than once");
+                    }
+
+                    switch (obj)
+                    {
+                    case "Project":             // Project doesn't expect subtype
+                        ret = new Project();    // TODO: Implement factory pattern
+                        break;
+                    case "Character":
+                        //ret = new Character(); TODO: Implement factory pattern
+                        break;
+                    default:
+                        throw new InvalidJsonEntryException("Ran into unexpected object type");
+                    }
+
+                    awaitSubType = false;
+
+                    break;
+                default:                        // Very few fields are common among all classes; we do another switch
+
+                /*
                 case "title":
                     if (ret.GetTitle() == null)
                     {
@@ -253,7 +293,7 @@ public class Parser
                     }
                     break;
                 default:
-                    throw new JsonParsingError("Unexpected field found->" + field);
+                    throw new JsonParsingError("Unexpected field found->" + field);*/
             }
 
             if (metEnd)

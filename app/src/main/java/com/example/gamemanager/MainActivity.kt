@@ -32,5 +32,9 @@ class MainActivity : AppCompatActivity()
             val newProjectIntent: Intent = Intent(this, NewProjectDialogActivity::class.java)
             startActivity(newProjectIntent)
         }
+
+        var projects: List<Project> // TODO: Read projects from memory
+
+        // TODO: Add buttons corresponding to projects, maybe also add sorting to projects
     }
 }
