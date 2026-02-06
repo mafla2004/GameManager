@@ -8,6 +8,22 @@
     android:background="@color/bckgr_gray"
     tools:context=".MainActivity" >
 
+    <Button
+        android:id="@+id/clearPrjButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Clear Projects"
+        android:textColor="@color/lining"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.6" />
+
     <ScrollView
         android:id="@+id/projectScroller"
         android:layout_width="411dp"
@@ -59,5 +75,6 @@
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.39"
         app:rippleColor="@color/lining" />
 </androidx.constraintlayout.widget.ConstraintLayout>

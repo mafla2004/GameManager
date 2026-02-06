@@ -1,6 +1,8 @@
 package com.example.gamemanager
 
-class Project(private var Name: String = "New Project", private var Description: String = "Project Description")
+import android.content.ContentValues
+
+class Project(private var Name: String = "New Project", private var Description: String = "Project Description"): Saveable
 {
     private var characters: MutableSet<Character> = mutableSetOf()
 
@@ -8,4 +10,25 @@ class Project(private var Name: String = "New Project", private var Description:
     {
 
     }
+
+    // GETTERS
+    public fun getName():          String = Name
+    public fun getDescription():   String = Description
+
+    // TODO: Maybe for setters introduce an autosave function, or just be lazy AF and have manual save -_-
+    // SETTERS AND OTHER MODIFIER METHODS
+    public fun setName(newName: String)            { Name = newName }
+    public fun setDescription(newDesc: String)     { Description = newDesc }
+
+    override fun getContentValues(): ContentValues
+    {
+        val ret: ContentValues = ContentValues().apply {
+            put("name", Name)
+            put("description", Description)
+        }
+
+        return ret
+    }
+
+    override fun getTable(): String = GameDatabaseHelper.PROJ_TABLE
 }

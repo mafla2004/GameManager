@@ -1,12 +1,14 @@
 package com.example.gamemanager
 
+import android.content.ContentValues
+
 open class Character(
     private val ownerProject:   Project,
     private var name:           String,
     private var species:        String,
     private var birth:          String,     // May not be a standard date, e.g.: "Imperial period, 5th year"
     private var age:            String      // May not be a simple integer, e.g.: "Unknown" or "40 millennia" or "Older than you"
-)
+): Saveable
 {
 
     init
@@ -49,4 +51,28 @@ open class Character(
     public fun setBStoryParagraph(index: Int, par: String)  { backstory[index] = par }
     public fun addBStoryParagraph(par: String)              { backstory += par }
     public fun removeBStoryParagraph(index: Int)            { backstory.removeAt(index) }
+
+    // INHERITED FROM SAVEABLE
+
+    override fun getContentValues(): ContentValues
+    {
+        val ret: ContentValues = ContentValues().apply {
+            // Primary key values
+            put("prj_name", ownerProject.getName())
+            put("name", name)
+
+            // Other values
+            put("aliases", aliases)
+            put("species", species)
+            put("birth", birth)
+            put("age", age)
+            put("aspect", aspect)
+            put("personality", personality)
+            // TODO: Put backstory - either figure out how to add arrays to SQLite or restructure backstory to be a single string
+        }
+
+        return ret
+    }
+
+    override fun getTable(): String = GameDatabaseHelper.CHAR_TABLE
 }

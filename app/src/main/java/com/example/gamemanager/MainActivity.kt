@@ -19,8 +19,11 @@ class MainActivity : AppCompatActivity()
         setContentView(R.layout.activity_main)
 
         // Declare UI components
-        val newProjectButton: Button    = findViewById(R.id.addProjectButton)
-        val projectScroller: ScrollView = findViewById(R.id.projectScroller)
+        val newProjectButton:   Button      = findViewById(R.id.addProjectButton)
+        val clearPrjButton:     Button      = findViewById(R.id.clearPrjButton)
+        val projectScroller:    ScrollView  = findViewById(R.id.projectScroller)
+
+        // TODO: Instantiate database
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -34,6 +37,10 @@ class MainActivity : AppCompatActivity()
         }
 
         var projects: List<Project> // TODO: Read projects from memory
+
+        clearPrjButton.setOnClickListener {
+
+        }
 
         // TODO: Add buttons corresponding to projects, maybe also add sorting to projects
     }
