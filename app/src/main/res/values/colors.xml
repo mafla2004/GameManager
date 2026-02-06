@@ -3,6 +3,8 @@
     <color name="black">#FF000000</color>
     <color name="bckgr_gray">#FF222222</color>
     <color name="frgr_gray">#FF333333</color>
+    <color name="bckgr_light">#FFAAAAAA</color>
+    <color name="frgr_light">#FFDDDDDD</color>
     <color name="lining">#FF999999</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

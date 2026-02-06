@@ -13,7 +13,8 @@
         android:theme="@style/Theme.GameManager">
         <activity
             android:name=".RequestClearConfirmDialog"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
             android:name=".NewProjectDialogActivity"
             android:exported="false"
