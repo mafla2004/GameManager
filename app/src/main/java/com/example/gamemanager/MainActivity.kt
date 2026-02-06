@@ -39,28 +39,35 @@ class MainActivity : AppCompatActivity()
         }
 
         var projects: MutableList<Project> = mutableListOf()
-        val projCursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
-
-        if (projCursor.moveToFirst())
+        try
         {
-            do
+            val projCursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
+
+            if (projCursor.moveToFirst())
             {
-                val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
-                val descr:  String = projCursor.getString(projCursor.getColumnIndexOrThrow("description"))
-                // TODO: Once implemented in the DB, add a functionality to read the characters and other important voices for projects
+                do
+                {
+                    val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
+                    val descr:  String = projCursor.getString(projCursor.getColumnIndexOrThrow("description"))
+                    // TODO: Once implemented in the DB, add a functionality to read the characters and other important voices for projects
 
-                val project: Project = Project(name, descr)
-                projects.add(project)
-            } while(projCursor.moveToNext())
+                    val project: Project = Project(name, descr)
+                    projects.add(project)
+                } while(projCursor.moveToNext())
 
-            // TODO: Implement functionality that adds button to the scrollview
+                // TODO: Implement functionality that adds button to the scrollview
+            }
+            else
+            {
+                Toast.makeText(this, "ERROR READING FROM DATABASE: Invalid table or db is empty", Toast.LENGTH_SHORT).show()
+            }
+
+            projCursor.close()  // I suppose?
         }
-        else
+        catch (e: RuntimeException)
         {
-            Toast.makeText(this, "ERROR READING FROM DATABASE: Invalid table or db is empty", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "ERROR: projects table doesn't exist", Toast.LENGTH_LONG).show()
         }
-
-        projCursor.close()  // I suppose?
 
         clearPrjButton.setOnClickListener {
             val intent: Intent = Intent(this, RequestClearConfirmDialog::class.java)
