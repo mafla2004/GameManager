@@ -57,9 +57,9 @@ open class Character(
 
     // INHERITED FROM SAVEABLE
 
-    override fun getContentValues(): ContentValues
+    override fun getContentValues(): Array<ContentValues>
     {
-        val ret: ContentValues = ContentValues().apply {
+        val cv: ContentValues = ContentValues().apply {
             // Primary key values
             put("prj_name", ownerProject.getName())
             put("name", name)
@@ -74,8 +74,8 @@ open class Character(
             // TODO: Put backstory - either figure out how to add arrays to SQLite or restructure backstory to be a single string
         }
 
-        return ret
+        return arrayOf(cv)
     }
 
-    override fun getTable(): String = GameDatabaseHelper.CHAR_TABLE
+    override fun getTables(): Array<String> = arrayOf(GameDatabaseHelper.CHAR_TABLE)
 }

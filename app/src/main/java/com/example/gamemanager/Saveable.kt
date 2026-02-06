@@ -6,6 +6,6 @@ import android.content.ContentValues
 interface Saveable
 {
     fun getNullColumnHacks(): String? = null
-    fun getContentValues(): ContentValues
-    fun getTable(): String
+    fun getContentValues(): Array<ContentValues>
+    fun getTables(): Array<String>
 }

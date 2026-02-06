@@ -1,5 +1,6 @@
 package com.example.gamemanager;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,6 +51,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         // ITEM FRAMEWORK
 
         db.execSQL("CREATE TABLE " + ITEM_TABLE + " (prj_name TEXT, name TEXT, description TEXT, PRIMARY KEY (prj_name, name))");
+
+        db.execSQL("CREATE TABLE " + WEPN_TABLE + " (prj_name TEXT, name TEXT, dmg INTEGER, PRIMARY KEY (prj_name, name))");
     }
 
     @Override
@@ -67,8 +70,32 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
     {
         SQLiteDatabase db = getWritableDatabase();
 
-        long result = db.insert(obj.getTable(), obj.getNullColumnHacks(), obj.getContentValues());
-        return result != -1L;
+        String[] tables = obj.getTables();
+        ContentValues[] cvs = obj.getContentValues();
+
+        if (tables.length != cvs.length)
+        {
+            return false;
+        }
+
+        /*  "Why are we doing this?"
+        *   Inheritance is not a thing in SQL and each subclass of character or really any class is gonna have data
+        *   that its parents and other sibling and nephew classes don't have, the amount and types of data stored
+        *   varies as we go down the inheritance tree. So to memorize all this data we define different tables
+        *   which hold the data unique to each specific class, and through the getTables() and getContentValues() methods
+        *   we get the list of the tables we can use to memorize this stuff as well as the values to memorize.
+        * */
+        for (int i = 0; i < tables.length; i++)
+        {
+            // TODO: Make more robust because if one insertion goes wrong you have garbage data
+            long res = db.insert(tables[i], obj.getNullColumnHacks(), cvs[i]);
+            if (res == -1L)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public int getProjectCount()
