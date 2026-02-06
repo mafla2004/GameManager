@@ -58,8 +58,6 @@ class MainActivity : AppCompatActivity()
 
                     val project: Project = Project(name, descr)
                     projects.add(project)
-
-                    // TODO: Implement functionality that adds button to the scrollview
                 } while(projCursor.moveToNext())
 
                 val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray())
@@ -70,6 +68,8 @@ class MainActivity : AppCompatActivity()
                 val projectScroller: RecyclerView = findViewById(R.id.projectScroller)
                 projectScroller.layoutManager = LinearLayoutManager(this)
                 projectScroller.adapter = projectRecyclerAdapter
+
+                // TODO: Add functionality to buttons
             }
             else
             {

@@ -21,15 +21,15 @@ class Project(private var Name: String = "New Project", private var Description:
     public fun setName(newName: String)            { Name = newName }
     public fun setDescription(newDesc: String)     { Description = newDesc }
 
-    override fun getContentValues(): ContentValues
+    override fun getContentValues(): Array<ContentValues>
     {
-        val ret: ContentValues = ContentValues().apply {
+        val cv: ContentValues = ContentValues().apply {
             put("name", Name)
             put("description", Description)
         }
 
-        return ret
+        return arrayOf(cv)
     }
 
-    override fun getTable(): String = GameDatabaseHelper.PROJ_TABLE
+    override fun getTables(): Array<String> = arrayOf(GameDatabaseHelper.PROJ_TABLE)
 }

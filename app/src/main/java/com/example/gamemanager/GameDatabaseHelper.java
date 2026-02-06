@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.example.gamemanager.Character.Character;
+import com.example.gamemanager.Character.GameCharacter;
+import com.example.gamemanager.Character.RPGCharacter;
 
 public class GameDatabaseHelper extends  SQLiteOpenHelper
 {
@@ -96,6 +99,78 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         }
 
         return true;
+    }
+
+    // Gets a character from the database based on the name
+    public Character getCharacter(Project owner, String name)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+
+        // Selecting the character based on primary key - Will either return no entries or one entry
+        Cursor cursor = db.rawQuery("SELECT * FROM " + CHAR_TABLE + " WHERE (prj_name IS " + owner.getName() + ") AND (name IS " + name + ")", null);
+
+        if (!cursor.moveToFirst())
+        {
+            return null;
+        }
+
+        Character ret;
+
+        String species      = cursor.getString(cursor.getColumnIndexOrThrow("species"));
+        String birth        = cursor.getString(cursor.getColumnIndexOrThrow("birth"));
+        String age          = cursor.getString(cursor.getColumnIndexOrThrow("age"));
+
+        String aspect       = cursor.getString(cursor.getColumnIndexOrThrow("aspect"));
+        String aliases      = cursor.getString(cursor.getColumnIndexOrThrow("aliases"));
+        //String backstory    = cursor.getString(cursor.getColumnIndexOrThrow("backstory"));  // TODO: IMPLEMENT BACKSTORY!!!
+        String personality  = cursor.getString(cursor.getColumnIndexOrThrow("personality"));
+
+        // Finished reading basic character info, query for other types of characters
+        cursor.close();
+
+        // Checking if character is a game character
+        cursor = db.rawQuery("SELECT * FROM " + GAMC_TABLE + " WHERE (prj_name IS " + owner.getName() + ") AND (name IS " + name + ")", null);
+
+        if (cursor.moveToFirst())
+        {
+            int maxHealth = cursor.getInt(cursor.getColumnIndexOrThrow("max_health"));
+
+            cursor.close();
+
+            // Checking if character is an RPG character (this'll get funny once we reach D&D)
+            cursor = db.rawQuery("SELECT * FROM " + RPG_TABLE + " WHERE (prj_name IS " + owner.getName() + ") AND (name IS " + name + ")", null);
+
+            if (cursor.moveToFirst())
+            {
+                int curHealth = cursor.getInt(cursor.getColumnIndexOrThrow("cur_health"));
+                String ownerPlayer = cursor.getString(cursor.getColumnIndexOrThrow("owner"));
+
+                // TODO: Implement D&D character maybe, low priority and high refactoring
+
+                ret = new RPGCharacter(owner, name, species, birth, age, maxHealth, curHealth, ownerPlayer);
+            }
+            else
+            {
+                ret = new GameCharacter(owner, name, species, birth, age, maxHealth);
+            }
+        }
+        else
+        {
+            ret = new Character(owner, name, species, birth, age);
+        }
+
+        ret.setAspect(aspect);
+        ret.setAliases(aliases);
+        // TODO: ADD BACKSTORY AAAA!!!
+        ret.setPersonality(personality);
+
+        return ret;
+    }
+
+    public Character[] getAllCharactersFrom(Project owner)
+    {
+        // TODO: Implement
+        return null;
     }
 
     public int getProjectCount()
