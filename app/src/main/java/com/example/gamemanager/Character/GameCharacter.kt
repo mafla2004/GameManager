@@ -1,7 +1,9 @@
-package com.example.gamemanager
+package com.example.gamemanager.Character
+
+import com.example.gamemanager.Project
 
 open class GameCharacter(
-    ownerProject:               Project,
+    ownerProject: Project,
     name:                       String,
     species:                    String,
     birth:                      String,

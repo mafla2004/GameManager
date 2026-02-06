@@ -2,7 +2,7 @@ package com.example.gamemanager
 
 import android.content.ContentValues
 
-open class Item(
+open class GameItem(
     private val ownerProject:   Project,
     private var name:           String,
     private var description:    String

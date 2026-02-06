@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GameManager">
         <activity
+            android:name=".ProjectViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CharacterViewerActivity"
+            android:exported="false" />
+        <activity
             android:name=".RequestClearConfirmDialog"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Dialog" />
@@ -19,9 +25,6 @@
             android:name=".NewProjectDialogActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Dialog" />
-        <activity
-            android:name=".ProjectManagerActivity"
-            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">

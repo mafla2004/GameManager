@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTintMode="multiply"
+    android:background="@color/bckgr_gray"
+    tools:context=".ProjectViewerActivity">
+
+    <TextView
+        android:id="@+id/projectHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Your project"
+        android:textColor="@color/lining"
+        android:textSize="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/mainScroller"
+        android:layout_width="409dp"
+        android:layout_height="662dp"
+        android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <LinearLayout
+                    android:layout_width="205dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Characters..."
+                        android:textAlignment="center"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textColor="@color/lining"
+                        android:textSize="24dp">
+                    </TextView>
+
+                    <Button
+                        android:id="@+id/newCharBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:backgroundTint="@color/frgr_gray"
+                        android:text="+ New Character"
+                        android:textSize="20dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textColor="@color/lining"
+                        app:cornerRadius="0dp"
+                        />
+
+                    <Button
+                        android:id="@+id/clearCharBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:backgroundTint="@color/frgr_gray"
+                        android:text="Clear Characters"
+                        android:textSize="20dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textColor="@color/lining"
+                        app:cornerRadius="0dp"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/charRecView"
+                    android:layout_width="206dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="right"/>
+            </LinearLayout>
+
+            <!-- Spacer -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="205dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Items and objects..."
+                        android:textAlignment="center"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textColor="@color/lining"
+                        android:textSize="24dp">
+                    </TextView>
+
+                    <Button
+                        android:id="@+id/newItemBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:backgroundTint="@color/frgr_gray"
+                        android:text="+ New Item"
+                        android:textSize="20dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textColor="@color/lining"
+                        app:cornerRadius="0dp"
+                        />
+
+                    <Button
+                        android:id="@+id/clearItemsBtn"
+                        android:layout_width="match_parent"
+                        android:layout_height="58dp"
+                        android:backgroundTint="@color/frgr_gray"
+                        android:text="Clear Items"
+                        android:textSize="20dp"
+                        android:fontFamily="sans-serif-condensed-medium"
+                        android:textColor="@color/lining"
+                        app:cornerRadius="0dp"/>
+
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/itemRecView"
+                    android:layout_width="206dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="right"/>
+
+            </LinearLayout>
+
+            <!-- Spacer -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

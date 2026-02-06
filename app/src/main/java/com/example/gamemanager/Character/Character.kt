@@ -1,9 +1,12 @@
-package com.example.gamemanager
+package com.example.gamemanager.Character
 
 import android.content.ContentValues
+import com.example.gamemanager.GameDatabaseHelper
+import com.example.gamemanager.Project
+import com.example.gamemanager.Saveable
 
 open class Character(
-    private val ownerProject:   Project,
+    private val ownerProject: Project,
     private var name:           String,
     private var species:        String,
     private var birth:          String,     // May not be a standard date, e.g.: "Imperial period, 5th year"
@@ -28,7 +31,7 @@ open class Character(
     // using a collection
 
     // GETTERS
-    public fun getOwnerProject():               Project         = ownerProject
+    public fun getOwnerProject(): Project = ownerProject
     public fun getName():                       String          = name
     public fun getAliases():                    String          = aliases
     public fun getSpecies():                    String          = species

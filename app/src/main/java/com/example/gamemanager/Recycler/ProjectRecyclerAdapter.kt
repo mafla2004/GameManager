@@ -1,0 +1,35 @@
+package com.example.gamemanager.Recycler
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.gamemanager.Project
+import com.example.gamemanager.R
+
+class ProjectRecyclerAdapter(private val projects: Array<Project>): RecyclerView.Adapter<ProjectRecyclerHolder>()
+{
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ProjectRecyclerHolder
+    {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.selector_button_layout, parent, false)
+
+        return ProjectRecyclerHolder(view)
+    }
+
+    override fun onBindViewHolder(
+        holder: ProjectRecyclerHolder,
+        position: Int
+    )
+    {
+        holder.text.text = projects[position].getName()
+    }
+
+    override fun getItemCount(): Int = projects.size
+
+    init
+    {
+
+    }
+}

@@ -1,6 +1,7 @@
 package com.example.gamemanager
 
 import android.content.ContentValues
+import com.example.gamemanager.Character.Character
 
 class Project(private var Name: String = "New Project", private var Description: String = "Project Description"): Saveable
 {

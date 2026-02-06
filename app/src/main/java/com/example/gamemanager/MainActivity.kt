@@ -3,13 +3,16 @@ package com.example.gamemanager
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
+import android.util.AttributeSet
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.RecyclerView
 
 class MainActivity : AppCompatActivity()
 {
@@ -21,9 +24,9 @@ class MainActivity : AppCompatActivity()
         setContentView(R.layout.activity_main)
 
         // Declare UI components
-        val newProjectButton:   Button      = findViewById(R.id.addProjectButton)
-        val clearPrjButton:     Button      = findViewById(R.id.clearPrjButton)
-        val projectScroller:    ScrollView  = findViewById(R.id.projectScroller)
+        val newProjectButton:   Button          = findViewById(R.id.addProjectButton)
+        val clearPrjButton:     Button          = findViewById(R.id.clearPrjButton)
+        val projectScroller:    RecyclerView    = findViewById(R.id.projectScroller)
 
         val database: GameDatabaseHelper = GameDatabaseHelper.getInstance(this)
 
@@ -53,9 +56,9 @@ class MainActivity : AppCompatActivity()
 
                     val project: Project = Project(name, descr)
                     projects.add(project)
-                } while(projCursor.moveToNext())
 
-                // TODO: Implement functionality that adds button to the scrollview
+                    // TODO: Implement functionality that adds button to the scrollview
+                } while(projCursor.moveToNext())
             }
             else
             {
