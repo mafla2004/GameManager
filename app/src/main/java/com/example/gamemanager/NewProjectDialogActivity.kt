@@ -19,16 +19,18 @@ class NewProjectDialogActivity : AppCompatActivity()
         setContentView(R.layout.activity_new_project_dialog)
 
         // Declare UI elements
-        val goBackButton: Button                = findViewById(R.id.goBackButton)
-        val createProjectButton: Button         = findViewById(R.id.createProjectButton)
-        val projectNameText: TextView           = findViewById(R.id.projectNameText)
-        val projectDescriptionText: TextView    = findViewById(R.id.projectDescriptionText)
+        val goBackButton:           Button   = findViewById(R.id.goBackButton)
+        val createProjectButton:    Button   = findViewById(R.id.createProjectButton)
+        val projectNameText:        TextView = findViewById(R.id.projectNameText)
+        val projectDescriptionText: TextView = findViewById(R.id.projectDescriptionText)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val database: GameDatabaseHelper = GameDatabaseHelper.getInstance(this)
 
         // Set Behaviour for create project button
         createProjectButton.setOnClickListener {
@@ -40,8 +42,11 @@ class NewProjectDialogActivity : AppCompatActivity()
             }
             else
             {
-                // TODO: Create project object, save it in memory using file or SQLite, optionally open it.
-                // var newProject: Project = Project(projectNameText.text.toString(), projectDescriptionText.text.toString())
+                val newProject: Project = Project(projectNameText.text.toString(), projectDescriptionText.text.toString())
+                database.addObject(newProject)
+                // TODO: Maybe open project?
+
+                finish()
             }
         }
 

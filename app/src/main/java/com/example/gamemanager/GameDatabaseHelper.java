@@ -39,7 +39,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE);
     }
 
-    public boolean addObject(Saveable obj)
+    public synchronized boolean addObject(Saveable obj)
     {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -66,6 +66,28 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             sInstance = new GameDatabaseHelper(context.getApplicationContext());
         }
         return sInstance;
+    }
+
+    public synchronized Cursor getAllEntriesFromTable(String tableName)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.rawQuery("SELECT * FROM " + tableName, null);
+    }
+
+    synchronized boolean clearDatabase()
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        if (db == null)
+        {
+            return false;
+        }
+
+        db.execSQL("DROP TABLE IF EXISTS " + PROJ_TABLE);   // Erases project table
+        // TODO: Drop other tables
+
+        return true;
     }
 
     private GameDatabaseHelper(Context context)

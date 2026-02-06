@@ -1,9 +1,11 @@
 package com.example.gamemanager
 
 import android.content.Intent
+import android.database.Cursor
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity()
         val clearPrjButton:     Button      = findViewById(R.id.clearPrjButton)
         val projectScroller:    ScrollView  = findViewById(R.id.projectScroller)
 
-        // TODO: Instantiate database
+        val database: GameDatabaseHelper = GameDatabaseHelper.getInstance(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -36,10 +38,33 @@ class MainActivity : AppCompatActivity()
             startActivity(newProjectIntent)
         }
 
-        var projects: List<Project> // TODO: Read projects from memory
+        var projects: MutableList<Project> = mutableListOf()
+        val projCursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
+
+        if (projCursor.moveToFirst())
+        {
+            do
+            {
+                val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
+                val descr:  String = projCursor.getString(projCursor.getColumnIndexOrThrow("description"))
+                // TODO: Once implemented in the DB, add a functionality to read the characters and other important voices for projects
+
+                val project: Project = Project(name, descr)
+                projects.add(project)
+            } while(projCursor.moveToNext())
+
+            // TODO: Implement functionality that adds button to the scrollview
+        }
+        else
+        {
+            Toast.makeText(this, "ERROR READING FROM DATABASE: Invalid table or db is empty", Toast.LENGTH_SHORT).show()
+        }
+
+        projCursor.close()  // I suppose?
 
         clearPrjButton.setOnClickListener {
-
+            val intent: Intent = Intent(this, RequestClearConfirmDialog::class.java)
+            startActivity(intent)
         }
 
         // TODO: Add buttons corresponding to projects, maybe also add sorting to projects
