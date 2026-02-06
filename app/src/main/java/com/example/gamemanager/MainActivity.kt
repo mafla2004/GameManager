@@ -12,7 +12,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gamemanager.Recycler.ProjectRecyclerAdapter
 
 class MainActivity : AppCompatActivity()
 {
@@ -59,6 +61,15 @@ class MainActivity : AppCompatActivity()
 
                     // TODO: Implement functionality that adds button to the scrollview
                 } while(projCursor.moveToNext())
+
+                val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray())
+                // Kotlin be like:
+                // "toArray()" That is the fakest shit I've ever seen in my life
+                // "toTypedArray()" HOLY SHIT!!! OwO
+
+                val projectScroller: RecyclerView = findViewById(R.id.projectScroller)
+                projectScroller.layoutManager = LinearLayoutManager(this)
+                projectScroller.adapter = projectRecyclerAdapter
             }
             else
             {
