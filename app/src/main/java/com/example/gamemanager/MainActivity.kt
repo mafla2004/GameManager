@@ -87,7 +87,5 @@ class MainActivity : AppCompatActivity()
             val intent: Intent = Intent(this, RequestClearConfirmDialog::class.java)
             startActivity(intent)
         }
-
-        // TODO: Add buttons corresponding to projects, maybe also add sorting to projects
     }
 }
