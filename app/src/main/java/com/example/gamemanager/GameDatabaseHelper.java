@@ -84,8 +84,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         int newVersion
     )
     {
-        db.execSQL("DROP TABLE IF EXISTS " + PROJ_TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + CHAR_TABLE);
+        clearDatabase();
     }
 
     public synchronized boolean addObject(Saveable obj)
@@ -117,7 +116,43 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             }
         }
 
+        /* DEBUG */
+        if (obj instanceof Project)
+        {
+            Log.d("DB", "Project description is: " + ((Project)obj).getDescription());
+        }
+
         return true;
+    }
+
+    public synchronized boolean removeObject(Saveable obj)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        String[] tables = obj.getTables();
+
+        for (String table : tables)
+        {
+            // TODO: Make more robust because if one deletion goes wrong you have garbage data
+            long res = db.delete(table, obj.getWhereClause(), null);
+            if (res < 1)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public synchronized boolean updateObject(Saveable obj)
+    {
+        if (!removeObject(obj))
+        {
+            Log.d("DB", "Removal went wrong during update");
+            return false;
+        }
+
+        return addObject(obj);
     }
 
     private GameItem resolveItem(Project owner, String name, Cursor cursor, SQLiteDatabase db)

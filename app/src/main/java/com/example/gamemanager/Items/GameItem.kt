@@ -31,6 +31,8 @@ open class GameItem(
 
     override fun getTables(): Array<String> = arrayOf(GameDatabaseHelper.ITEM_TABLE)
 
+    override fun getWhereClause(): String = "(prj_name IS '${ownerProject.getName()}') AND (name IS '$name')"
+
     fun getOwnerProject(): Project = ownerProject
 
     public fun getName():          String = name

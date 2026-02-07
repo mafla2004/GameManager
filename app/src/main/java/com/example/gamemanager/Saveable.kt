@@ -8,4 +8,6 @@ interface Saveable
     fun getNullColumnHacks(): String? = null
     fun getContentValues(): Array<ContentValues>
     fun getTables(): Array<String>
+
+    fun getWhereClause(): String // WhereClause is a single string because most times the primary key remains the same in the entire inheritance chain
 }

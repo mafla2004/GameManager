@@ -28,7 +28,7 @@ class ItemsRecyclerAdapter(private val items: Array<GameItem> /* TODO: Add lambd
         position: Int
     )
     {
-        holder.text.text = items[position].getName()
+        holder.textView.text = items[position].getName()
     }
 
     override fun getItemCount(): Int = items.size

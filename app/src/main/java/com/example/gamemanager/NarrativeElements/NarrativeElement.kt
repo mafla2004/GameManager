@@ -54,4 +54,6 @@ class NarrativeElement(
     }
 
     override fun getTables(): Array<String> = arrayOf(GameDatabaseHelper.NELM_TABLE)
+
+    override fun getWhereClause(): String = "(prj_name IS '${ownerProject.getName()}') AND (name IS '$name')"
 }

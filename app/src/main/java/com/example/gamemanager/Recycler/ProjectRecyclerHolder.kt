@@ -8,14 +8,14 @@ import com.example.gamemanager.R
 
 class ProjectRecyclerHolder(itemView: View, val onClick: (String) -> Unit): RecyclerView.ViewHolder(itemView)
 {
-    lateinit var text: TextView
+    lateinit var textView: TextView
 
     init
     {
-        text = itemView.findViewById(R.id.btnText)
+        textView = itemView.findViewById(R.id.btnText)
 
         itemView.setOnClickListener {   // QUELL'UOMO ERA PADRONE DI KOTLIN
-            onClick(text.toString())
+            onClick(textView.text.toString())
         }
     }
 }

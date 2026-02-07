@@ -23,7 +23,7 @@ class Project(private var Name: String = "New Project", private var Description:
     public fun getItems():              Collection<GameItem>            = items
     public fun getNarrativeElements():  Collection<NarrativeElement>    = narrative
 
-    // TODO: Maybe for setters introduce an autosave function, or just be lazy AF and have manual save -_-
+    // TODO: Maybe for setters introduce an autosave function, or just be lazy AF and have manual save -_- | ADDENDUM: I'm lazy AF
     // SETTERS AND OTHER MODIFIER METHODS
     public fun setName(newName: String)            { Name = newName }
     public fun setDescription(newDesc: String)     { Description = newDesc }
@@ -41,4 +41,6 @@ class Project(private var Name: String = "New Project", private var Description:
     }
 
     override fun getTables(): Array<String> = arrayOf(GameDatabaseHelper.PROJ_TABLE)
+
+    override fun getWhereClause(): String = "(name IS '" + Name + "')"
 }

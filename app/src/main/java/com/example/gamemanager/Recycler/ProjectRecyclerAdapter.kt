@@ -23,7 +23,7 @@ class ProjectRecyclerAdapter(private val projects: Array<String>, private val on
         position: Int
     )
     {
-        holder.text.text = projects[position]
+        holder.textView.text = projects[position]
     }
 
     override fun getItemCount(): Int = projects.size

@@ -17,6 +17,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-condensed-medium"
         android:text="Your project"
+        android:textAlignment="textStart"
         android:textColor="@color/lining"
         android:textSize="40dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,12 +26,13 @@
     <ScrollView
         android:id="@+id/mainScroller"
         android:layout_width="409dp"
-        android:layout_height="662dp"
-        android:layout_marginTop="48dp"
+        android:layout_height="687dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="88dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/projectHeader"
         app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
@@ -281,11 +283,12 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-condensed-medium"
                         android:text="Events..."
                         android:textAlignment="center"
-                        android:fontFamily="sans-serif-condensed-medium"
                         android:textColor="@color/lining"
                         android:textSize="24dp">
+
                     </TextView>
 
                     <Button
@@ -328,5 +331,54 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <EditText
+        android:id="@+id/descriptionEdit"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:inputType="text"
+        android:text="The description of your project goes here"
+        android:textAlignment="textStart"
+        android:textColor="@color/lining"
+        app:layout_constraintBottom_toTopOf="@+id/mainScroller"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/projectHeader"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/saveBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Save Project"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
+
+    <Button
+        android:id="@+id/loadBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Load Project"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.825"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

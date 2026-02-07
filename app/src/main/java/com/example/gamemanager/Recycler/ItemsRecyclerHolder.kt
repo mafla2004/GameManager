@@ -7,11 +7,11 @@ import com.example.gamemanager.R
 
 class ItemsRecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 {
-    lateinit var text: TextView
+    lateinit var textView: TextView
 
     init
     {
-        text = itemView.findViewById(R.id.btnText)
+        textView = itemView.findViewById(R.id.btnText)
 
 
     }

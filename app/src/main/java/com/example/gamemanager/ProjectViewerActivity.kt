@@ -2,6 +2,10 @@ package com.example.gamemanager
 
 import android.database.Cursor
 import android.os.Bundle
+import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -38,9 +42,10 @@ class ProjectViewerActivity : AppCompatActivity()
         val database: GameDatabaseHelper = GameDatabaseHelper.getInstance(this)
         val cursor: Cursor = database.getProjectFromName(projectName)
 
+        Log.d("DB", "Projects found with name $projectName: ${cursor.count}")
+
         if (!cursor.moveToFirst())
         {
-            Toast.makeText(this, "Project doesn't exist, going back", Toast.LENGTH_SHORT).show()
             finish()
         }
 
@@ -53,5 +58,31 @@ class ProjectViewerActivity : AppCompatActivity()
 
         // TODO: Make Recycler View of items
 
+        // Declare UI elements
+        val descriptionEditView:    EditText    = findViewById(R.id.descriptionEdit)
+        val projectHeader:          TextView    = findViewById(R.id.projectHeader)
+        val saveButton:             Button      = findViewById(R.id.saveBtn)
+        val loadButton:             Button      = findViewById(R.id.loadBtn)
+
+        projectHeader.text = projectName
+        descriptionEditView.setText(if (projDescription.isEmpty()) "Project description goes here..." else projDescription)
+
+        saveButton.setOnClickListener {
+            // NOTE: The fields that aren't that easy to update automatically, like those of EditTexts for some reason, must be saved here
+            project.setDescription(descriptionEditView.text.toString())
+
+            if (database.updateObject(project))
+            {
+                Toast.makeText(this, "Project saved successfully", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                Toast.makeText(this, "Save failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        loadButton.setOnClickListener {
+            // TODO: Add loading functionality you goober
+        }
     }
 }

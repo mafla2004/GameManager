@@ -28,7 +28,7 @@ class CharacterRecyclerAdapter(private val characters: Array<Character> /* TODO:
         position: Int
     )
     {
-        holder.text.text = characters[position].getName()
+        holder.textView.text = characters[position].getName()
     }
 
     override fun getItemCount(): Int = characters.size

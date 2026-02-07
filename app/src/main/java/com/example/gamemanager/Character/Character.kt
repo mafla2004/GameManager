@@ -69,4 +69,6 @@ open class Character(
     }
 
     override fun getTables(): Array<String> = arrayOf(GameDatabaseHelper.CHAR_TABLE)
+
+    override fun getWhereClause(): String = "(prj_name IS '${ownerProject.getName()}') AND (name IS '$name')"
 }
