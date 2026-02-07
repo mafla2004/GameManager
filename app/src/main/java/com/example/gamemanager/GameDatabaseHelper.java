@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 import com.example.gamemanager.Character.Character;
 import com.example.gamemanager.Character.GameCharacter;
 import com.example.gamemanager.Character.RPGCharacter;
@@ -101,19 +102,76 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         return true;
     }
 
+    private Character resolveCharacter(Project owner, String name, Cursor cursor, SQLiteDatabase db)
+    {
+        // Assuming the moveToFirst() or moveToNext() operations were successful
+
+        Character ret;
+
+        String species      = cursor.getString(cursor.getColumnIndexOrThrow("species"));
+        String birth        = cursor.getString(cursor.getColumnIndexOrThrow("birth"));
+        String age          = cursor.getString(cursor.getColumnIndexOrThrow("age"));
+
+        String aspect       = cursor.getString(cursor.getColumnIndexOrThrow("aspect"));
+        String aliases      = cursor.getString(cursor.getColumnIndexOrThrow("aliases"));
+        //String backstory    = cursor.getString(cursor.getColumnIndexOrThrow("backstory"));  // TODO: IMPLEMENT BACKSTORY!!!
+        String personality  = cursor.getString(cursor.getColumnIndexOrThrow("personality"));
+
+        Cursor aux_cursor = db.rawQuery("SELECT * FROM " + GAMC_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
+
+        if (aux_cursor.moveToFirst())
+        {
+            int maxHealth = aux_cursor.getInt(aux_cursor.getColumnIndexOrThrow("max_health"));
+
+            aux_cursor.close();
+
+            // Checking if character is an RPG character (this'll get funny once we reach D&D)
+            aux_cursor = db.rawQuery("SELECT * FROM " + RPG_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
+
+            if (aux_cursor.moveToFirst())
+            {
+                int curHealth = aux_cursor.getInt(aux_cursor.getColumnIndexOrThrow("cur_health"));
+                String ownerPlayer = aux_cursor.getString(aux_cursor.getColumnIndexOrThrow("owner"));
+
+                // TODO: Implement D&D character maybe, low priority and high refactoring
+
+                ret = new RPGCharacter(owner, name, species, birth, age, maxHealth, curHealth, ownerPlayer);
+            }
+            else
+            {
+                ret = new GameCharacter(owner, name, species, birth, age, maxHealth);
+            }
+        }
+        else
+        {
+            ret = new Character(owner, name, species, birth, age);
+        }
+
+        aux_cursor.close();
+
+        ret.setAspect(aspect);
+        ret.setAliases(aliases);
+        // TODO: ADD BACKSTORY AAAA!!!
+        ret.setPersonality(personality);
+
+        return ret;
+    }
+
     // Gets a character from the database based on the name
     public Character getCharacter(Project owner, String name)
     {
         SQLiteDatabase db = getReadableDatabase();
 
         // Selecting the character based on primary key - Will either return no entries or one entry
-        Cursor cursor = db.rawQuery("SELECT * FROM " + CHAR_TABLE + " WHERE (prj_name IS " + owner.getName() + ") AND (name IS " + name + ")", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + CHAR_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
 
         if (!cursor.moveToFirst())
         {
             return null;
         }
 
+        // TODO: Maybe substitute with function call of resolveCharacter()
+        // resolveCharacter(owner, name, cursor, db);
         Character ret;
 
         String species      = cursor.getString(cursor.getColumnIndexOrThrow("species"));
@@ -129,7 +187,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         cursor.close();
 
         // Checking if character is a game character
-        cursor = db.rawQuery("SELECT * FROM " + GAMC_TABLE + " WHERE (prj_name IS " + owner.getName() + ") AND (name IS " + name + ")", null);
+        cursor = db.rawQuery("SELECT * FROM " + GAMC_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
 
         if (cursor.moveToFirst())
         {
@@ -138,7 +196,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             cursor.close();
 
             // Checking if character is an RPG character (this'll get funny once we reach D&D)
-            cursor = db.rawQuery("SELECT * FROM " + RPG_TABLE + " WHERE (prj_name IS " + owner.getName() + ") AND (name IS " + name + ")", null);
+            cursor = db.rawQuery("SELECT * FROM " + RPG_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
 
             if (cursor.moveToFirst())
             {
@@ -159,6 +217,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             ret = new Character(owner, name, species, birth, age);
         }
 
+        cursor.close();
+
         ret.setAspect(aspect);
         ret.setAliases(aliases);
         // TODO: ADD BACKSTORY AAAA!!!
@@ -167,10 +227,60 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         return ret;
     }
 
+    public int getCharacterCountIn(Project owner)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + CHAR_TABLE + " WHERE (prj_name IS '" + owner.getName() + "')", null);
+
+        int num = cursor.moveToFirst() ? cursor.getInt(0) : 0;
+
+        cursor.close();
+
+        return num;
+    }
+
     public Character[] getAllCharactersFrom(Project owner)
     {
-        // TODO: Implement
-        return null;
+        // Doing things INEFFICIENTLY
+
+        int count = getCharacterCountIn(owner);
+        Log.d("DB", "Count: " + count);
+        if (count < 1)
+        {
+            return new Character[0];
+        }
+
+        Character ret[] = new Character[count];
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + CHAR_TABLE + " WHERE (prj_name IS " +  owner.getName() + ")", null);
+        if (!cursor.moveToFirst())
+        {
+            return null;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            // Could call getCharacter(owner, character.name), but that'd be slow
+            try
+            {
+                ret[i] = resolveCharacter(owner, cursor.getString(cursor.getColumnIndexOrThrow("name")), cursor, db);
+                Log.d("DB", "Loaded character name: " + ret[i].getName());
+            }
+            catch (Exception e)
+            {
+                Log.d("DB", "Error loading character: " + e.toString());
+            }
+
+            if (!cursor.moveToNext())
+            {
+                break;
+            }
+        }
+
+        return ret;
     }
 
     public int getProjectCount()
@@ -198,7 +308,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
     {
         SQLiteDatabase db = getReadableDatabase();
 
-        return db.rawQuery("SELECT * FROM " + tableName, null);
+       // return db.query(tableName, null, null, null, null, null, null);
+       return db.rawQuery("SELECT * FROM " + tableName, null);
     }
 
     synchronized boolean clearDatabase()

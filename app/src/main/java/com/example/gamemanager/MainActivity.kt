@@ -4,6 +4,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ScrollView
@@ -48,6 +49,8 @@ class MainActivity : AppCompatActivity()
         {
             val projCursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
 
+            Log.d("DB", "${projCursor.count}")
+
             if (projCursor.moveToFirst())
             {
                 do
@@ -57,6 +60,8 @@ class MainActivity : AppCompatActivity()
                     // TODO: Once implemented in the DB, add a functionality to read the characters and other important voices for projects
 
                     val project: Project = Project(name, descr)
+                    project.setCharacters(database.getAllCharactersFrom(project)) // ERROR HERE!
+
                     projects.add(project)
                 } while(projCursor.moveToNext())
 
