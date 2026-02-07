@@ -3,11 +3,13 @@ package com.example.gamemanager
 import android.content.ContentValues
 import com.example.gamemanager.Character.Character
 import com.example.gamemanager.Items.GameItem
+import com.example.gamemanager.NarrativeElements.NarrativeElement
 
 class Project(private var Name: String = "New Project", private var Description: String = "Project Description"): Saveable
 {
-    private var characters: MutableList<Character>  = mutableListOf()
-    private var items:      MutableList<GameItem>   = mutableListOf()
+    private var characters: MutableList<Character>          = mutableListOf()
+    private var items:      MutableList<GameItem>           = mutableListOf()
+    private var narrative:  MutableList<NarrativeElement>   = mutableListOf()
 
     init
     {
@@ -15,9 +17,11 @@ class Project(private var Name: String = "New Project", private var Description:
     }
 
     // GETTERS
-    public fun getName():          String = Name
-    public fun getDescription():   String = Description
-    public fun getCharacters():    Collection<Character> = characters
+    public fun getName():               String                          = Name
+    public fun getDescription():        String                          = Description
+    public fun getCharacters():         Collection<Character>           = characters
+    public fun getItems():              Collection<GameItem>            = items
+    public fun getNarrativeElements():  Collection<NarrativeElement>    = narrative
 
     // TODO: Maybe for setters introduce an autosave function, or just be lazy AF and have manual save -_-
     // SETTERS AND OTHER MODIFIER METHODS

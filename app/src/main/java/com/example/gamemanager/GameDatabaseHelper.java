@@ -400,12 +400,19 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         return sInstance;
     }
 
-    public synchronized Cursor getAllEntriesFromTable(String tableName)
+    public Cursor getAllEntriesFromTable(String tableName)
     {
         SQLiteDatabase db = getReadableDatabase();
 
        // return db.query(tableName, null, null, null, null, null, null);
        return db.rawQuery("SELECT * FROM " + tableName, null);
+    }
+
+    public Cursor getProjectFromName(String projName)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+
+        return db.rawQuery("SELECT * FROM " + PROJ_TABLE + " WHERE (name IS '" + projName + "')", null);
     }
 
     synchronized boolean clearDatabase()
