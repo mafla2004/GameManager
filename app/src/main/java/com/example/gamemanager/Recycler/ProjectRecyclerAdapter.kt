@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gamemanager.Project
 import com.example.gamemanager.R
 
-class ProjectRecyclerAdapter(private val projects: Array<Project>, private val onClick: (String) -> Unit): RecyclerView.Adapter<ProjectRecyclerHolder>()
+class ProjectRecyclerAdapter(private val projects: Array<String>, private val onClick: (String) -> Unit): RecyclerView.Adapter<ProjectRecyclerHolder>()
 {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -23,7 +23,7 @@ class ProjectRecyclerAdapter(private val projects: Array<Project>, private val o
         position: Int
     )
     {
-        holder.text.text = projects[position].getName()
+        holder.text.text = projects[position]
     }
 
     override fun getItemCount(): Int = projects.size

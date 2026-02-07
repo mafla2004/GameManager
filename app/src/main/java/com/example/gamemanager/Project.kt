@@ -8,7 +8,6 @@ class Project(private var Name: String = "New Project", private var Description:
 {
     private var characters: MutableList<Character>  = mutableListOf()
     private var items:      MutableList<GameItem>   = mutableListOf()
-    private var skills:     MutableList<Skill>      = mutableListOf()
 
     init
     {
@@ -24,7 +23,8 @@ class Project(private var Name: String = "New Project", private var Description:
     // SETTERS AND OTHER MODIFIER METHODS
     public fun setName(newName: String)            { Name = newName }
     public fun setDescription(newDesc: String)     { Description = newDesc }
-    fun setCharacters(chars: Array<Character>)     { characters = chars.toMutableList(); }
+    fun setCharacters(chars: Array<Character>)     { characters = chars.toMutableList() }
+    fun setItems(itArr: Array<GameItem>)            { items = itArr.toMutableList() }
 
     override fun getContentValues(): Array<ContentValues>
     {

@@ -174,6 +174,28 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         return ret;
     }
 
+    public GameItem[] getAllItemsIn(Project project)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + ITEM_TABLE + " WHERE (prj_name IS '" + project.getName() + "')", null);
+        int count = cursor.getCount();
+
+        if (!cursor.moveToFirst())
+        {
+            return new GameItem[0];
+        }
+
+        GameItem items[] = new GameItem[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            items[i] = resolveItem(project, cursor.getString(cursor.getColumnIndexOrThrow("name")), cursor, db);
+            cursor.moveToNext();
+        }
+
+        return items;
+    }
+
     private Character resolveCharacter(Project owner, String name, Cursor cursor, SQLiteDatabase db)
     {
         // Assuming the moveToFirst() or moveToNext() operations were successful
@@ -314,6 +336,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
     public Character[] getAllCharactersFrom(Project owner)
     {
+        // TODO: Remake, make it similar to getAllItemsIn(project)
+
         // Doing things INEFFICIENTLY
 
         int count = getCharacterCountIn(owner);

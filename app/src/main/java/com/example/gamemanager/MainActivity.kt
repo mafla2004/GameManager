@@ -51,6 +51,40 @@ class MainActivity : AppCompatActivity()
             startActivity(newProjectIntent)
         }
 
+        var projects: MutableList<String> = mutableListOf()
+        try
+        {
+            val projCursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
+
+            Log.d("DB", "${projCursor.count}")
+
+            if (projCursor.moveToFirst())
+            {
+                do
+                {
+                    // We just get the name of the projects instead of loading them all
+                    val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
+
+                    projects.add(name)
+                } while (projCursor.moveToNext())   // Fun fact - IDK if it was a typo or autocomplete or what, but this was moveToFirst(), which caused stack overflow
+            }
+
+            val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray()) { project ->
+                onRecyclerClick(project)
+            }
+            // Kotlin be like:
+            // "toArray()" That is the fakest shit I've ever seen in my life
+            // "toTypedArray()" HOLY SHIT!!! OwO
+
+            val projectScroller: RecyclerView = findViewById(R.id.projectScroller)
+            projectScroller.layoutManager = LinearLayoutManager(this)
+            projectScroller.adapter = projectRecyclerAdapter
+        }
+        catch (e: RuntimeException)
+        {
+            Toast.makeText(this, "ERROR: projects table doesn't exist", Toast.LENGTH_LONG).show()
+        }
+        /*
         var projects: MutableList<Project> = mutableListOf()
         try
         {
@@ -64,10 +98,10 @@ class MainActivity : AppCompatActivity()
                 {
                     val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
                     val descr:  String = projCursor.getString(projCursor.getColumnIndexOrThrow("description"))
-                    // TODO: Once implemented in the DB, add a functionality to read other important voices for projects
 
                     val project: Project = Project(name, descr)
                     project.setCharacters(database.getAllCharactersFrom(project))
+                    project.setItems(database.getAllItemsIn(project))
 
                     projects.add(project)
                 } while(projCursor.moveToNext())
@@ -82,8 +116,6 @@ class MainActivity : AppCompatActivity()
                 val projectScroller: RecyclerView = findViewById(R.id.projectScroller)
                 projectScroller.layoutManager = LinearLayoutManager(this)
                 projectScroller.adapter = projectRecyclerAdapter
-
-                // TODO: Add functionality to buttons
             }
             else
             {
@@ -96,6 +128,7 @@ class MainActivity : AppCompatActivity()
         {
             Toast.makeText(this, "ERROR: projects table doesn't exist", Toast.LENGTH_LONG).show()
         }
+        */
 
         clearPrjButton.setOnClickListener {
             val intent: Intent = Intent(this, RequestClearConfirmDialog::class.java)
