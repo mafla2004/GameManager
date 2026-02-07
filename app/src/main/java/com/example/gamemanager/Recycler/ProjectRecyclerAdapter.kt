@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gamemanager.Project
 import com.example.gamemanager.R
 
-class ProjectRecyclerAdapter(private val projects: Array<Project>): RecyclerView.Adapter<ProjectRecyclerHolder>()
+class ProjectRecyclerAdapter(private val projects: Array<Project>, private val onClick: (String) -> Unit): RecyclerView.Adapter<ProjectRecyclerHolder>()
 {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -15,7 +15,7 @@ class ProjectRecyclerAdapter(private val projects: Array<Project>): RecyclerView
     {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.selector_button_layout, parent, false)
 
-        return ProjectRecyclerHolder(view)
+        return ProjectRecyclerHolder(view, onClick)
     }
 
     override fun onBindViewHolder(

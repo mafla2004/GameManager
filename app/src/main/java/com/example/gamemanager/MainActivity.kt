@@ -19,6 +19,13 @@ import com.example.gamemanager.Recycler.ProjectRecyclerAdapter
 
 class MainActivity : AppCompatActivity()
 {
+    private fun onRecyclerClick(project: String)
+    {
+        val intent: Intent = Intent(this, ProjectViewerActivity()::class.java)
+        intent.putExtra("name", project)
+        startActivity(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -57,15 +64,17 @@ class MainActivity : AppCompatActivity()
                 {
                     val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
                     val descr:  String = projCursor.getString(projCursor.getColumnIndexOrThrow("description"))
-                    // TODO: Once implemented in the DB, add a functionality to read the characters and other important voices for projects
+                    // TODO: Once implemented in the DB, add a functionality to read other important voices for projects
 
                     val project: Project = Project(name, descr)
-                    project.setCharacters(database.getAllCharactersFrom(project)) // ERROR HERE!
+                    project.setCharacters(database.getAllCharactersFrom(project))
 
                     projects.add(project)
                 } while(projCursor.moveToNext())
 
-                val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray())
+                val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray()) { project ->
+                    onRecyclerClick(project)
+                }
                 // Kotlin be like:
                 // "toArray()" That is the fakest shit I've ever seen in my life
                 // "toTypedArray()" HOLY SHIT!!! OwO
