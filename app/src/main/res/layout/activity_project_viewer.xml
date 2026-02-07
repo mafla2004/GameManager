@@ -355,13 +355,13 @@
         android:layout_height="58dp"
         android:backgroundTint="@color/frgr_gray"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="Save Project"
+        android:text="Save"
         android:textColor="@color/lining"
         android:textSize="20dp"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintHorizontal_bias="0.05"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
 
@@ -371,14 +371,29 @@
         android:layout_height="58dp"
         android:backgroundTint="@color/frgr_gray"
         android:fontFamily="sans-serif-condensed-medium"
-        android:text="Load Project"
+        android:text="Load"
         android:textColor="@color/lining"
         android:textSize="20dp"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.825"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
 
+    <Button
+        android:id="@+id/delBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Delete"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
 </androidx.constraintlayout.widget.ConstraintLayout>

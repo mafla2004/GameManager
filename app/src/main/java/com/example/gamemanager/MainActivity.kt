@@ -19,6 +19,9 @@ import com.example.gamemanager.Recycler.ProjectRecyclerAdapter
 
 class MainActivity : AppCompatActivity()
 {
+    private lateinit var database: GameDatabaseHelper
+    private lateinit var scroller: RecyclerView
+
     private fun onRecyclerClick(project: String)
     {
         val intent: Intent = Intent(this, ProjectViewerActivity()::class.java)
@@ -26,31 +29,8 @@ class MainActivity : AppCompatActivity()
         startActivity(intent)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?)
+    private fun updateScroller()
     {
-        super.onCreate(savedInstanceState)
-
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
-
-        // Declare UI components
-        val newProjectButton:   Button          = findViewById(R.id.addProjectButton)
-        val clearPrjButton:     Button          = findViewById(R.id.clearPrjButton)
-        val projectScroller:    RecyclerView    = findViewById(R.id.projectScroller)
-
-        val database: GameDatabaseHelper = GameDatabaseHelper.getInstance(this)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
-
-        newProjectButton.setOnClickListener {
-            val newProjectIntent: Intent = Intent(this, NewProjectDialogActivity::class.java)
-            startActivity(newProjectIntent)
-        }
-
         var projects: MutableList<String> = mutableListOf()
         try
         {
@@ -76,63 +56,53 @@ class MainActivity : AppCompatActivity()
             // "toArray()" That is the fakest shit I've ever seen in my life
             // "toTypedArray()" HOLY SHIT!!! OwO
 
-            val projectScroller: RecyclerView = findViewById(R.id.projectScroller)
-            projectScroller.layoutManager = LinearLayoutManager(this)
-            projectScroller.adapter = projectRecyclerAdapter
+            scroller.layoutManager = LinearLayoutManager(this)
+            scroller.adapter = projectRecyclerAdapter
         }
         catch (e: RuntimeException)
         {
             Toast.makeText(this, "ERROR: projects table doesn't exist", Toast.LENGTH_LONG).show()
         }
-        /*
-        var projects: MutableList<Project> = mutableListOf()
-        try
-        {
-            val projCursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
+    }
 
-            Log.d("DB", "${projCursor.count}")
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
+        super.onCreate(savedInstanceState)
 
-            if (projCursor.moveToFirst())
-            {
-                do
-                {
-                    val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
-                    val descr:  String = projCursor.getString(projCursor.getColumnIndexOrThrow("description"))
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_main)
 
-                    val project: Project = Project(name, descr)
-                    project.setCharacters(database.getAllCharactersFrom(project))
-                    project.setItems(database.getAllItemsIn(project))
+        // Declare UI components
+        val newProjectButton:   Button          = findViewById(R.id.addProjectButton)
+        val clearPrjButton:     Button          = findViewById(R.id.clearPrjButton)
 
-                    projects.add(project)
-                } while(projCursor.moveToNext())
+        scroller = findViewById(R.id.projectScroller)   // This one be special
 
-                val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray()) { project ->
-                    onRecyclerClick(project)
-                }
-                // Kotlin be like:
-                // "toArray()" That is the fakest shit I've ever seen in my life
-                // "toTypedArray()" HOLY SHIT!!! OwO
+        database = GameDatabaseHelper.getInstance(this)
 
-                val projectScroller: RecyclerView = findViewById(R.id.projectScroller)
-                projectScroller.layoutManager = LinearLayoutManager(this)
-                projectScroller.adapter = projectRecyclerAdapter
-            }
-            else
-            {
-                Toast.makeText(this, "ERROR READING FROM DATABASE: Invalid table or db is empty", Toast.LENGTH_SHORT).show()
-            }
-
-            projCursor.close()  // I suppose?
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
-        catch (e: RuntimeException)
-        {
-            Toast.makeText(this, "ERROR: projects table doesn't exist", Toast.LENGTH_LONG).show()
+
+        newProjectButton.setOnClickListener {
+            val newProjectIntent: Intent = Intent(this, NewProjectDialogActivity::class.java)
+            startActivity(newProjectIntent)
         }
-        */
+
+        updateScroller()
 
         clearPrjButton.setOnClickListener {
             val intent: Intent = Intent(this, RequestClearConfirmDialog::class.java)
             startActivity(intent)
         }
+    }
+
+    override fun onResume()
+    {
+        super.onResume()
+
+        updateScroller()
     }
 }

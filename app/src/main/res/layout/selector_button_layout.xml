@@ -5,12 +5,13 @@
     android:background="@color/frgr_gray">
 
     <TextView
+        android:id="@+id/btnText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/btnText"
-        android:textColor="@color/lining"
-        android:text="NAME"
-        android:textSize="24sp"
         android:fontFamily="sans-serif-condensed-medium"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:text="NAME"
+        android:textColor="@color/lining"
+        android:textSize="24sp"
+        />
 </RelativeLayout>

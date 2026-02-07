@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GameManager">
         <activity
+            android:name=".NarrativeViewerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ItemViewerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProjectViewerActivity"
             android:exported="false" />
         <activity

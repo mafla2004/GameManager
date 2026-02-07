@@ -15,8 +15,7 @@ enum class ElementType(val value: Int)
 {
     LOCATION(0),
     FACTION(1),
-    EVENT(2),
-    WAR(3)
+    EVENT(2)        // Originally there was a WAR entry, but wars are events
 }
 
 /*

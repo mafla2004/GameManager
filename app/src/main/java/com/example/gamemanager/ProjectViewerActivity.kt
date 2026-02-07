@@ -1,5 +1,6 @@
 package com.example.gamemanager
 
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.util.Log
@@ -11,9 +12,30 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.RecyclerView
 
 class ProjectViewerActivity : AppCompatActivity()
 {
+    private val CHAR_S = 0
+    private val ITEM_S = 1
+    private val NAR_S = 2
+
+    private fun onCharRecClick(scroller: Int, prj_name: String, name: String)
+    {
+        val intent: Intent
+        when (scroller)
+        {
+            0 -> intent = Intent(this, CharacterViewerActivity()::class.java)
+            1 -> intent = Intent(this, ItemViewerActivity()::class.java)
+            2 -> intent = Intent(this, NarrativeViewerActivity()::class.java)
+            else -> return
+        }
+
+        intent.putExtra("prj_name", prj_name)
+        intent.putExtra("name", name)
+        startActivity(intent)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
@@ -59,10 +81,33 @@ class ProjectViewerActivity : AppCompatActivity()
         // TODO: Make Recycler View of items
 
         // Declare UI elements
+
+        // Standard elements
         val descriptionEditView:    EditText    = findViewById(R.id.descriptionEdit)
         val projectHeader:          TextView    = findViewById(R.id.projectHeader)
         val saveButton:             Button      = findViewById(R.id.saveBtn)
         val loadButton:             Button      = findViewById(R.id.loadBtn)
+        val delButton:              Button      = findViewById(R.id.delBtn)
+
+        // Character collection elements
+        val newCharBtn:             Button      = findViewById(R.id.newCharBtn)
+        val clearCharBtn:           Button      = findViewById(R.id.clearCharBtn)
+        val charScroller:           RecyclerView= findViewById(R.id.charRecView)
+
+        // Item collection elements
+        val newItemBtn:             Button      = findViewById(R.id.newItemBtn)
+        val clearItemsBtn:          Button      = findViewById(R.id.clearItemsBtn)
+        val itemScroller:           RecyclerView= findViewById(R.id.itemRecView)
+
+        // Narrative Framework elements
+        val newLocBtn:              Button      = findViewById(R.id.newLocationBtn)
+        val newFacBtn:              Button      = findViewById(R.id.newFactionBtn)
+        val newEvtBtn:              Button      = findViewById(R.id.newEventBtn)
+        val clearLocBtn:            Button      = findViewById(R.id.clearLocationsBtn)
+        val clearFacBtn:            Button      = findViewById(R.id.clearFactionsBtn)
+        val clearEvtBtn:            Button      = findViewById(R.id.clearEventsBtn)
+
+        // Standard actions
 
         projectHeader.text = projectName
         descriptionEditView.setText(if (projDescription.isEmpty()) "Project description goes here..." else projDescription)
@@ -83,6 +128,73 @@ class ProjectViewerActivity : AppCompatActivity()
 
         loadButton.setOnClickListener {
             // TODO: Add loading functionality you goober
+        }
+
+        delButton.setOnClickListener {
+            for (c in project.getCharacters())
+            {
+                database.removeObject(c)
+            }
+
+            for (i in project.getItems())
+            {
+                database.removeObject(i)
+            }
+
+            for (n in project.getNarrativeElements())
+            {
+                database.removeObject(n)
+            }
+
+            database.removeObject(project)
+
+            finish()
+        }
+
+        // Character collection actions
+
+        newCharBtn.setOnClickListener {
+
+        }
+
+        clearCharBtn.setOnClickListener {
+
+        }
+
+        // Item collection actions
+
+        newItemBtn.setOnClickListener {
+
+        }
+
+        clearItemsBtn.setOnClickListener {
+
+        }
+
+        // Narrative Framework actions
+
+        newLocBtn.setOnClickListener {
+
+        }
+
+        clearLocBtn.setOnClickListener {
+
+        }
+
+        newFacBtn.setOnClickListener {
+
+        }
+
+        clearFacBtn.setOnClickListener {
+
+        }
+
+        newEvtBtn.setOnClickListener {
+
+        }
+
+        clearEvtBtn.setOnClickListener {
+
         }
     }
 }
