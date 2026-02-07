@@ -2,10 +2,13 @@ package com.example.gamemanager
 
 import android.content.ContentValues
 import com.example.gamemanager.Character.Character
+import com.example.gamemanager.Items.GameItem
 
 class Project(private var Name: String = "New Project", private var Description: String = "Project Description"): Saveable
 {
-    private var characters: MutableSet<Character> = mutableSetOf()
+    private var characters: MutableList<Character>  = mutableListOf()
+    private var items:      MutableList<GameItem>   = mutableListOf()
+    private var skills:     MutableList<Skill>      = mutableListOf()
 
     init
     {
@@ -21,7 +24,7 @@ class Project(private var Name: String = "New Project", private var Description:
     // SETTERS AND OTHER MODIFIER METHODS
     public fun setName(newName: String)            { Name = newName }
     public fun setDescription(newDesc: String)     { Description = newDesc }
-    fun setCharacters(chars: Array<Character>)     { characters = chars.toMutableSet(); }
+    fun setCharacters(chars: Array<Character>)     { characters = chars.toMutableList(); }
 
     override fun getContentValues(): Array<ContentValues>
     {

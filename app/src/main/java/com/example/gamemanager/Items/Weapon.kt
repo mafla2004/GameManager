@@ -4,7 +4,7 @@ import android.content.ContentValues
 import com.example.gamemanager.GameDatabaseHelper
 import com.example.gamemanager.Project
 
-class Weapon(
+open class Weapon(
     ownerProject:       Project,
     name:               String,
     description:        String,

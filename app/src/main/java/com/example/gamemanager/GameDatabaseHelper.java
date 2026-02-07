@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.gamemanager.Character.Character;
 import com.example.gamemanager.Character.GameCharacter;
 import com.example.gamemanager.Character.RPGCharacter;
+import com.example.gamemanager.Items.GameItem;
 
 public class GameDatabaseHelper extends  SQLiteOpenHelper
 {
@@ -28,6 +29,10 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
     // Item related tables
     public static final String ITEM_TABLE = "items";
     public static final String WEPN_TABLE = "weapons";
+    public static final String RGDW_TABLE = "ranged_weapon";
+
+    // Table for narrative elements
+    public static final String NELM_TABLE = "narrative_elements";
 
     @Override
     public void onCreate(SQLiteDatabase db)
@@ -43,7 +48,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         *  and another character named Horus purely for comedic effect (say a petty prince that can't tolerate that others bear his name),
         *  the user would be required to name one "Horus" or "Horus (god)" and the other "Horus (prince)" or "Prince Horus" */
         db.execSQL("CREATE TABLE " + CHAR_TABLE + " (prj_name TEXT, name TEXT, aliases TEXT, " +
-                "species TEXT, birth TEXT, age TEXT, aspect TEXT, personality TEXT, PRIMARY KEY (prj_name, name))");
+                "species TEXT, birth TEXT, age TEXT, aspect TEXT, personality TEXT, backstory TEXT, PRIMARY KEY (prj_name, name))");
         // {parent project, name} -> {species, birth, age etc...}
 
         // This table contains the extra information of characters of class GameCharacter, not the information of its subclasses
@@ -57,6 +62,12 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         db.execSQL("CREATE TABLE " + ITEM_TABLE + " (prj_name TEXT, name TEXT, description TEXT, PRIMARY KEY (prj_name, name))");
 
         db.execSQL("CREATE TABLE " + WEPN_TABLE + " (prj_name TEXT, name TEXT, dmg INTEGER, PRIMARY KEY (prj_name, name))");
+
+        db.execSQL("CREATE TABLE " + RGDW_TABLE + " (prj_name TEXT, name TEXT, reach TEXT, ammo TEXT, PRIMARY KEY (prj_name, name))");
+
+        // NARRATIVE ELEMENT FRAMEWORK
+
+        db.execSQL("CREATE TABLE " + NELM_TABLE + " (prj_name TEXT, name TEXT, type INTEGER, )");
     }
 
     @Override
@@ -102,6 +113,17 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         return true;
     }
 
+    private GameItem resolveItem(Project owner, String name, Cursor cursor, SQLiteDatabase db)
+    {
+        GameItem ret;
+
+        String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+
+
+
+        return ret;
+    }
+
     private Character resolveCharacter(Project owner, String name, Cursor cursor, SQLiteDatabase db)
     {
         // Assuming the moveToFirst() or moveToNext() operations were successful
@@ -114,7 +136,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         String aspect       = cursor.getString(cursor.getColumnIndexOrThrow("aspect"));
         String aliases      = cursor.getString(cursor.getColumnIndexOrThrow("aliases"));
-        //String backstory    = cursor.getString(cursor.getColumnIndexOrThrow("backstory"));  // TODO: IMPLEMENT BACKSTORY!!!
+        String backstory    = cursor.getString(cursor.getColumnIndexOrThrow("backstory"));
         String personality  = cursor.getString(cursor.getColumnIndexOrThrow("personality"));
 
         Cursor aux_cursor = db.rawQuery("SELECT * FROM " + GAMC_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
@@ -151,7 +173,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         ret.setAspect(aspect);
         ret.setAliases(aliases);
-        // TODO: ADD BACKSTORY AAAA!!!
+        ret.setBackstory(backstory);
         ret.setPersonality(personality);
 
         return ret;
@@ -180,7 +202,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         String aspect       = cursor.getString(cursor.getColumnIndexOrThrow("aspect"));
         String aliases      = cursor.getString(cursor.getColumnIndexOrThrow("aliases"));
-        //String backstory    = cursor.getString(cursor.getColumnIndexOrThrow("backstory"));  // TODO: IMPLEMENT BACKSTORY!!!
+        String backstory    = cursor.getString(cursor.getColumnIndexOrThrow("backstory"));
         String personality  = cursor.getString(cursor.getColumnIndexOrThrow("personality"));
 
         // Finished reading basic character info, query for other types of characters
@@ -221,7 +243,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         ret.setAspect(aspect);
         ret.setAliases(aliases);
-        // TODO: ADD BACKSTORY AAAA!!!
+        ret.setBackstory(backstory);
         ret.setPersonality(personality);
 
         return ret;
@@ -326,6 +348,9 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS " + GAMC_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + RPG_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + ITEM_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + WEPN_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + RGDW_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + NELM_TABLE);
         // TODO: Drop other tables
 
         onCreate(db);

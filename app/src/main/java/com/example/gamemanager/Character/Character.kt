@@ -21,13 +21,8 @@ open class Character(
 
     private var aspect: String = ""
     private var personality: String = ""
-    private var backstory: MutableList<String> = mutableListOf()            // Character backstories are usually more complex than other traits,
-    // I have debated whether using a list of strings (for multiple paragraphs)
-    // or a single huge string, eventually I settled for a list of stringe because,
-    // if the user wants to edit a specific paragraph or add one / remove one, we don't have to
-    // reinitialize the entire backstory, just the paragraph we need.
-    // It's also easier to handle it programmatically.
-    private var aliases: String = ""                                        // Aliases of the character, stored as a string because there's no gain from
+    private var backstory: String = "mutableListOf()  "
+    private var aliases: String = ""                   // Aliases of the character, stored as a string because there's no gain from
     // using a collection
 
     // GETTERS
@@ -39,9 +34,7 @@ open class Character(
     public fun getAge():                        String          = age
     public fun getAspect():                     String          = aspect
     public fun getPersonality():                String          = personality
-    public fun getBackstory():                  List<String>    = backstory.toList()
-    public fun getBStoryParagraph(index: Int):  String          = backstory[index]
-    public fun getBStoryParagraphCount():       Int             = backstory.size
+    public fun getBackstory():                  String          = backstory
 
     // SETTERS AND MODIFIER METHODS
     public fun setName(newName: String)                     { name = newName }
@@ -51,9 +44,7 @@ open class Character(
     public fun setAge(newAge: String)                       { age = newAge}
     public fun setAspect(newAspect: String)                 { aspect = newAspect }
     public fun setPersonality(newPers: String)              { personality = newPers }
-    public fun setBStoryParagraph(index: Int, par: String)  { backstory[index] = par }
-    public fun addBStoryParagraph(par: String)              { backstory += par }
-    public fun removeBStoryParagraph(index: Int)            { backstory.removeAt(index) }
+    public fun setBackstory(newBStory: String)              { backstory = newBStory }
 
     // INHERITED FROM SAVEABLE
 
@@ -71,7 +62,7 @@ open class Character(
             put("age", age)
             put("aspect", aspect)
             put("personality", personality)
-            // TODO: Put backstory - either figure out how to add arrays to SQLite or restructure backstory to be a single string
+            put("backstory", backstory)
         }
 
         return arrayOf(cv)
