@@ -9,7 +9,10 @@ import android.util.Log;
 import com.example.gamemanager.Character.Character;
 import com.example.gamemanager.Character.GameCharacter;
 import com.example.gamemanager.Character.RPGCharacter;
+import com.example.gamemanager.Items.Consumable;
 import com.example.gamemanager.Items.GameItem;
+import com.example.gamemanager.Items.RangedWeapon;
+import com.example.gamemanager.Items.Weapon;
 
 public class GameDatabaseHelper extends  SQLiteOpenHelper
 {
@@ -30,6 +33,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
     public static final String ITEM_TABLE = "items";
     public static final String WEPN_TABLE = "weapons";
     public static final String RGDW_TABLE = "ranged_weapon";
+
+    public static final String CONS_TABLE = "consumables";
 
     // Table for narrative elements
     public static final String NELM_TABLE = "narrative_elements";
@@ -65,9 +70,11 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         db.execSQL("CREATE TABLE " + RGDW_TABLE + " (prj_name TEXT, name TEXT, reach TEXT, ammo TEXT, PRIMARY KEY (prj_name, name))");
 
+        db.execSQL("CREATE TABLE " + CONS_TABLE + " (prj_name TEXT, name TEXT, uses INTEGER, effects TEXT, PRIMARY KEY (prj_name, name))");
+
         // NARRATIVE ELEMENT FRAMEWORK
 
-        db.execSQL("CREATE TABLE " + NELM_TABLE + " (prj_name TEXT, name TEXT, type INTEGER, )");
+        db.execSQL("CREATE TABLE " + NELM_TABLE + " (prj_name TEXT, name TEXT, type INTEGER, PRIMARY KEY (prj_name, name))");
     }
 
     @Override
@@ -119,7 +126,50 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
+        Cursor aux_cursor = db.rawQuery("SELECT * FROM " + WEPN_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
 
+        if (aux_cursor.moveToFirst())
+        {
+            int damage = aux_cursor.getInt(aux_cursor.getColumnIndexOrThrow("dmg"));
+
+            aux_cursor.close();
+
+            // Check if it is a ranged weapon now TwT
+            aux_cursor = db.rawQuery("SELECT * FROM " + RGDW_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
+
+            if (aux_cursor.moveToFirst())
+            {
+                String reach    = aux_cursor.getString(aux_cursor.getColumnIndexOrThrow("reach"));
+                String ammo     = aux_cursor.getString(aux_cursor.getColumnIndexOrThrow("ammo"));
+
+                ret = new RangedWeapon(owner, name, description, damage, reach, ammo);
+            }
+            else
+            {
+                ret = new Weapon(owner, name, description, damage);
+            }
+        }
+        else
+        {
+            aux_cursor.close();
+
+            // Check if it is a consumable
+            aux_cursor = db.rawQuery("SELECT * FROM " + CONS_TABLE + " WHERE (prj_name IS '" + owner.getName() + "') AND (name IS '" + name + "')", null);
+
+            if (aux_cursor.moveToFirst())
+            {
+                int uses = aux_cursor.getInt(aux_cursor.getColumnIndexOrThrow("uses"));
+                String effects = aux_cursor.getString(aux_cursor.getColumnIndexOrThrow("effects"));
+
+                ret = new Consumable(owner, name, description, uses, effects);
+            }
+            else
+            {
+                ret = new GameItem(owner, name, description);
+            }
+        }
+
+        aux_cursor.close();
 
         return ret;
     }
@@ -350,6 +400,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS " + ITEM_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + WEPN_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + RGDW_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + CONS_TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + NELM_TABLE);
         // TODO: Drop other tables
 
@@ -363,55 +414,3 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         super(context, DBNAME, null, 1);
     }
 }
-
-/* For historical reasons, this is the original database defined in Kotlin
-val DBNAME: String = "games_database.db"
-val PROJ_TABLE: String = "projects"         // Name of table used for projects
-val CHAR_TABLE: String = "characters"       // Name of table used for characters
-
-class GameDatabaseHelper(context: Context): SQLiteOpenHelper(context, DBNAME, null, 1)
-{
-    override fun onCreate(db: SQLiteDatabase)
-    {
-        /* Create table of projects, where primary key is the name of the project /
-        db.execSQL("CREATE TABLE $PROJ_TABLE (name TEXT PRIMARY KEY, description TEXT)")
-
-        /* Create table of characters, each character can be uniquely identified by the project they belong to
-        *  and their name; in case there are multiple characters with the same name, the user would be required to set their
-        *  name with some more detail in order to avoid confusion, so for example if a project has a character Horus (egyptian god)
-        *  and another character named Horus purely for comedic effect (say a petty prince that can't tolerate that others bear his name),
-        *  the user would be required to name one "Horus" or "Horus (god)" and the other "Horus (prince)" or "Prince Horus" /
-        db.execSQL("CREATE TABLE $CHAR_TABLE ((prj_name TEXT, name TEXT) PRIMARY KEY, aliases TEXT, " +
-                "species TEXT, birth TEXT, age TEXT, aspect TEXT, personality TEXT)")
-    }
-
-    override fun onUpgrade(
-        db: SQLiteDatabase,
-        oldVersion: Int,
-        newVersion: Int
-    )
-    {
-        db.execSQL("DROP TABLE IF EXISTS $PROJ_TABLE")
-        db.execSQL("DROP TABLE IF EXISTS $CHAR_TABLE")
-    }
-
-    fun addObject(obj: Saveable): Boolean
-    {
-        val db: SQLiteDatabase = this.writableDatabase
-
-        val result: Long = db.insert(obj.getTable(), obj.getNullColumnHacks(), obj.getContentValues())
-        return result != -1L
-    }
-
-    fun getProjectCount(): Int
-    {
-        val db: SQLiteDatabase = this.readableDatabase
-
-        val cursor: Cursor = db.rawQuery("SELECT COUNT(*) FROM $PROJ_TABLE", null)
-        cursor.moveToFirst()
-        val count: Int = cursor.getInt(0)
-        cursor.close()
-
-        return count
-    }
-}*/
