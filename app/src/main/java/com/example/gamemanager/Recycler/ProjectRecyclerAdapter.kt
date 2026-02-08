@@ -1,5 +1,6 @@
 package com.example.gamemanager.Recycler
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class ProjectRecyclerAdapter(private val projects: Array<String>, private val on
     )
     {
         holder.textView.text = projects[position]
+        Log.d("PRH", "Creating character button for ${projects[position]}")
     }
 
     override fun getItemCount(): Int = projects.size

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.sax.Element;
 import android.util.Log;
 import com.example.gamemanager.Character.Character;
 import com.example.gamemanager.Character.GameCharacter;
@@ -13,6 +14,7 @@ import com.example.gamemanager.Items.Consumable;
 import com.example.gamemanager.Items.GameItem;
 import com.example.gamemanager.Items.RangedWeapon;
 import com.example.gamemanager.Items.Weapon;
+import com.example.gamemanager.NarrativeElements.NarrativeElement;
 
 public class GameDatabaseHelper extends  SQLiteOpenHelper
 {
@@ -76,7 +78,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         // NARRATIVE ELEMENT FRAMEWORK
 
-        db.execSQL("CREATE TABLE " + NELM_TABLE + " (prj_name TEXT, name TEXT, type INTEGER, PRIMARY KEY (prj_name, name))");
+        db.execSQL("CREATE TABLE " + NELM_TABLE + " (prj_name TEXT, name TEXT, type INTEGER, start_d TEXT, end_d TEXT, PRIMARY KEY (prj_name, name))");
     }
 
     @Override
@@ -211,6 +213,20 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         return ret;
     }
 
+    public NarrativeElement resolveNarrativeElement(Project owner, String name, Cursor cursor, SQLiteDatabase db)
+    {
+        NarrativeElement ret;
+
+        String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+        String start = cursor.getString(cursor.getColumnIndexOrThrow("start_d"));
+        String end = cursor.getString(cursor.getColumnIndexOrThrow("end_d"));
+        int type = cursor.getInt(cursor.getColumnIndexOrThrow("type"));
+
+        ret = new NarrativeElement(owner, name, type, description, start, end);
+
+        return ret;
+    }
+
     public GameItem[] getAllItemsIn(Project project)
     {
         SQLiteDatabase db = getReadableDatabase();
@@ -231,6 +247,27 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         }
 
         return items;
+    }
+
+    public NarrativeElement[] getAllNarrativeElementsIn(Project project)
+    {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + NELM_TABLE + " WHERE (prj_name IS '" + project.getName() + "')", null);
+        int count = cursor.getCount();
+
+        if (!cursor.moveToFirst())
+        {
+            return new NarrativeElement[0];
+        }
+
+        NarrativeElement nelms[] = new NarrativeElement[count];
+
+        for (int i = 0; i < count; i++)
+        {
+            nelms[i] = resolveNarrativeElement(project, cursor.getString(cursor.getColumnIndexOrThrow("name")), cursor, db);
+        }
+
+        return nelms;
     }
 
     private Character resolveCharacter(Project owner, String name, Cursor cursor, SQLiteDatabase db)

@@ -29,7 +29,9 @@ class Project(private var Name: String = "New Project", private var Description:
     public fun setName(newName: String)            { Name = newName }
     public fun setDescription(newDesc: String)     { Description = newDesc }
     fun setCharacters(chars: Array<Character>)     { characters = chars.toMutableList() }
-    fun setItems(itArr: Array<GameItem>)            { items = itArr.toMutableList() }
+    fun setItems(itArr: Array<GameItem>)           { items = itArr.toMutableList() }
+
+    fun setNarrative(nArr: Array<NarrativeElement>){ narrative = nArr.toMutableList() }
 
     fun addCharacter(char: Character): Boolean
     {

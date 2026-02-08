@@ -1,5 +1,6 @@
 package com.example.gamemanager.Recycler
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -19,7 +20,6 @@ class CharacterRecyclerAdapter(private val characters: Array<String>, private va
     ): CharacterRecyclerHolder
     {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.selector_button_layout, parent, false)
-
         return CharacterRecyclerHolder(view, onClick)
     }
 
@@ -29,6 +29,7 @@ class CharacterRecyclerAdapter(private val characters: Array<String>, private va
     )
     {
         holder.textView.text = characters[position]
+        Log.d("CVH", "Creating character button for ${characters[position]}")
     }
 
     override fun getItemCount(): Int = characters.size

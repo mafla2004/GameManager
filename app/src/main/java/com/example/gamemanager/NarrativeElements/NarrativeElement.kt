@@ -9,14 +9,12 @@ import com.example.gamemanager.Saveable
 *   Could have made these different classes, but due to lack of time we have to work smarter instead of harder.
 *   A narrative element will have the basic elements to represent a nation, a location, an event or a war.
 *   Under the hood, the way data is represented stays the same, on the surface it is presented in different ways
-*   based on an enum
+*   based on these values
 * */
-enum class ElementType(val value: Int)
-{
-    LOCATION(0),
-    FACTION(1),
-    EVENT(2)        // Originally there was a WAR entry, but wars are events
-}
+
+const val LOCATION: Int = 0
+const val FACTION: Int = 1
+const val EVENT: Int = 2
 
 /*
 *   Every element has a set of defining characteristics which can be boiled down to information that can be stored in the same fields:
@@ -27,7 +25,7 @@ enum class ElementType(val value: Int)
 class NarrativeElement(
     private val ownerProject:   Project,
     private var name:           String,
-    private var type:           ElementType,
+    private var type:           Int,
     private var description:    String,
     private var startDate:      String,
     private var endDate:        String
@@ -36,7 +34,7 @@ class NarrativeElement(
     // Getters
     public fun getOwnerProject():   Project     = ownerProject
     public fun getName():           String      = name
-    public fun getType():           ElementType = type
+    public fun getType():           Int         = type
     public fun getDescription():    String      = description
     public fun getStartDate():      String      = startDate
     public fun getEndDate():        String      = endDate
@@ -44,12 +42,22 @@ class NarrativeElement(
     // Setters
     fun setName(newName: String)        { name = newName }
     fun setDescription(newDesc: String) { description = newDesc }
-    fun setType(newType: ElementType)   { type = newType }
+    fun setType(newType: Int)           { type = newType }
     fun setStartDate(newStart: String)  { startDate = newStart }
     fun setEndDate(newEnd: String)      { endDate = newEnd }
 
-    override fun getContentValues(): Array<ContentValues> {
-        TODO("Not yet implemented")
+    override fun getContentValues(): Array<ContentValues>
+    {
+        val cv: ContentValues = ContentValues().apply {
+            put("prj_name", ownerProject.getName())
+            put("name", name)
+            put("type", type)
+            put("description", description)
+            put("start_d", startDate)
+            put("end_d", endDate)
+        }
+
+        return arrayOf(cv)
     }
 
     override fun getTables(): Array<String> = arrayOf(GameDatabaseHelper.NELM_TABLE)

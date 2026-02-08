@@ -14,15 +14,26 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gamemanager.NarrativeElements.ElementType
 import com.example.gamemanager.Recycler.CharacterRecyclerAdapter
 import com.example.gamemanager.Recycler.EventRecyclerAdapter
 import com.example.gamemanager.Recycler.FactionRecyclerAdapter
 import com.example.gamemanager.Recycler.ItemsRecyclerAdapter
 import com.example.gamemanager.Recycler.LocationRecyclerAdapter
 
+/*
+*   I have spent 5000 years in this activity as of now
+*   and by the looks of it I'll spend 5000 more stuck in here
+ */
 class ProjectViewerActivity : AppCompatActivity()
 {
+    /*  TODO: You clearly need some rest because you're basically not reasoning at all, here's what you will do:
+    *   rest a bit, get your ideas clear, then come back and update this god forsaken activity,
+    *   load the entire project on create no matter the memory drawback, then modify the update scrollers functions
+    *   to read from the project object, if necessary add a more advanced loading and saving option to the database.
+    *   The burnout is real with this one
+     */
+
+    private lateinit var project: Project
     private lateinit var database: GameDatabaseHelper
     private lateinit var prj_name: String
 
@@ -37,6 +48,33 @@ class ProjectViewerActivity : AppCompatActivity()
     private val ITEM_S = 1
     private val NAR_S = 2
 
+    private fun loadProject(): Boolean
+    {
+        if (AppCommons.getCurrentProject() != null)
+        {
+            return true
+        }
+
+        // TODO: Probably can be made better rather than having to redo the query
+        database = GameDatabaseHelper.getInstance(this)
+        val cursor: Cursor = database.getProjectFromName(prj_name)
+
+        Log.d("DB", "Projects found with name $prj_name: ${cursor.count}")
+
+        if (!cursor.moveToFirst())
+        {
+            return false
+        }
+
+        var projDescription: String = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+        project = Project(prj_name.toString(), projDescription) // Converting string to string, WELCOME TO KOTLIN
+        AppCommons.setCurrentProject(project) // Added afterwards to communicate a project between activities, should probably refactor, but I'm in burnout
+        project.setCharacters(database.getAllCharactersFrom(project))
+        project.setItems(database.getAllItemsIn(project))
+
+        return true
+    }
+
     private fun onRecyclerClick(scroller: Int, name: String)
     {
         val intent: Intent
@@ -48,122 +86,108 @@ class ProjectViewerActivity : AppCompatActivity()
             else -> return
         }
 
-        intent.putExtra("prj_name", prj_name)
+        //intent.putExtra("prj_name", prj_name) may be unnecessary, just look for the character in the global project
         intent.putExtra("name", name)
         startActivity(intent)
     }
 
     private fun updateScroller(scroller: Int): Boolean
     {
-        val table: String
+        if (scroller == ALL_S)
+        {
+            return updateScroller(CHAR_S) && updateScroller(ITEM_S) && updateScroller(NAR_S)
+        }
+
+        // This is a bit sketchy because NAR_S handles 3 different Recycler Views, and since all narrative elements
+        // are grouped together in the database I have to do a custom search, overall implementing this
+        // shouldn't be too hard, figuring out what to do though ate up lots of time TwT
+        if (scroller == NAR_S)
+        {
+            var factions:   MutableList<String> = mutableListOf()
+            var locations:  MutableList<String> = mutableListOf()
+            var events:     MutableList<String> = mutableListOf()
+
+            for (n in project.getNarrativeElements())
+            {
+                val name:   String  = n.getName()
+                val type:   Int     = n.getType()
+
+                when (type)
+                {
+                    0 -> locations.add(name)
+                    1 -> factions.add(name)
+                    2 -> events.add(name)
+                    else ->
+                    {
+                        Log.e("SCR_UPD", "Invalid narrative element type read: $type")
+                        throw RuntimeException("Read Invalid N. Element type: $type")
+                    }
+                }
+            }
+
+            val factionRecyclerAdapter: FactionRecyclerAdapter = FactionRecyclerAdapter(factions.toTypedArray()) { name ->
+                onRecyclerClick(scroller, name)
+            }
+
+            val locationRecyclerAdapter: LocationRecyclerAdapter = LocationRecyclerAdapter(factions.toTypedArray()) { name ->
+                onRecyclerClick(scroller, name)
+            }
+
+            val eventRecyclerAdapter: EventRecyclerAdapter = EventRecyclerAdapter(factions.toTypedArray()) { name ->
+                onRecyclerClick(scroller, name)
+            }
+
+            nFacScroller.layoutManager = LinearLayoutManager(this)
+            nLocScroller.layoutManager = LinearLayoutManager(this)
+            nEvtScroller.layoutManager = LinearLayoutManager(this)
+
+            nFacScroller.adapter = factionRecyclerAdapter
+            nLocScroller.adapter = locationRecyclerAdapter
+            nEvtScroller.adapter = eventRecyclerAdapter
+        }
+
+        var elements: MutableList<String> = mutableListOf()
         when (scroller)
         {
-            ALL_S -> return updateScroller(CHAR_S) && updateScroller(ITEM_S) && updateScroller(NAR_S)
-            CHAR_S -> table = GameDatabaseHelper.CHAR_TABLE
-            ITEM_S -> table = GameDatabaseHelper.ITEM_TABLE
-            NAR_S  -> table = GameDatabaseHelper.NELM_TABLE
-            else -> return false
-        }
-
-        try
-        {
-            val cursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
-
-            Log.d("DB", "Elements found in $table table: ${cursor.count}")
-
-            // This is a bit sketchy because NAR_S handles 3 different Recycler Views, and since all narrative elements
-            // are grouped together in the database I have to do a custom search, overall implementing this
-            // shouldn't be too hard, figuring out what to do though ate up lots of time TwT
-            if (scroller == NAR_S)
-            {
-                var factions:   MutableList<String> = mutableListOf()
-                var locations:  MutableList<String> = mutableListOf()
-                var events:     MutableList<String> = mutableListOf()
-
-                if (cursor.moveToFirst())
+            CHAR_S -> {
+                Log.d("SCR_UPD", "Loading ${project.getCharacters().size} characters")
+                for (c in project.getCharacters())
                 {
-                    do
-                    {
-                        val name:   String  = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-                        val type:   Int     = cursor.getInt(cursor.getColumnIndexOrThrow("type"))
-
-                        when (type)
-                        {
-                            0 -> locations.add(name)
-                            1 -> factions.add(name)
-                            2 -> events.add(name)
-                            else ->
-                            {
-                                Log.e("DB", "Invalid narrative element type read: $type")
-                                throw RuntimeException("Read Invalid N. Element type from Database: $type")
-                            }
-                        }
-                    } while (cursor.moveToNext())
-
-                    val factionRecyclerAdapter: FactionRecyclerAdapter = FactionRecyclerAdapter(factions.toTypedArray()) { name ->
-                        onRecyclerClick(scroller, name)
-                    }
-
-                    val locationRecyclerAdapter: LocationRecyclerAdapter = LocationRecyclerAdapter(factions.toTypedArray()) { name ->
-                        onRecyclerClick(scroller, name)
-                    }
-
-                    val eventRecyclerAdapter: EventRecyclerAdapter = EventRecyclerAdapter(factions.toTypedArray()) { name ->
-                        onRecyclerClick(scroller, name)
-                    }
-
-                    nFacScroller.layoutManager = LinearLayoutManager(this)
-                    nLocScroller.layoutManager = LinearLayoutManager(this)
-                    nEvtScroller.layoutManager = LinearLayoutManager(this)
-
-                    nFacScroller.adapter = factionRecyclerAdapter
-                    nLocScroller.adapter = locationRecyclerAdapter
-                    nEvtScroller.adapter = eventRecyclerAdapter
+                    Log.d("SCR_UPD", "Loading character ${c.getName()}")
+                    elements.add(c.getName())
                 }
             }
-
-            var elements: MutableList<String> = mutableListOf()
-            if (cursor.moveToFirst())
-            {
-                do
+            ITEM_S -> {
+                Log.d("SCR_UPD", "Loading ${project.getCharacters().size} items")
+                for (i in project.getItems())
                 {
-                    // We just get the name of the objects instead of loading them all
-                    val name:   String = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-
-                    elements.add(name)
-                } while (cursor.moveToNext())
-
-            }
-
-            // On each update, each scroller is assigned the same function with a different scroller parameter value
-            when (scroller)
-            {
-                CHAR_S -> {
-                    val characterRecyclerAdapter: CharacterRecyclerAdapter = CharacterRecyclerAdapter(elements.toTypedArray()) { name ->
-                        onRecyclerClick(scroller, name)
-                    }
-
-                    charScroller.layoutManager = LinearLayoutManager(this)
-                    charScroller.adapter = characterRecyclerAdapter
-                }
-                ITEM_S -> {
-                    val itemsRecyclerAdapter: ItemsRecyclerAdapter = ItemsRecyclerAdapter(elements.toTypedArray()) { name ->
-                        onRecyclerClick(scroller, name)
-                    }
-
-                    itemScroller.layoutManager = LinearLayoutManager(this)
-                    itemScroller.adapter = itemsRecyclerAdapter
+                    elements.add(i.getName())
                 }
             }
-
-            return true
         }
-        catch (e: RuntimeException)
+
+        // On each update, each scroller is assigned the same function with a different scroller parameter value
+        when (scroller)
         {
-            Toast.makeText(this, "ERROR: nonexistent table or invalid type read, check logcat", Toast.LENGTH_LONG).show()
+            CHAR_S -> {
+                val characterRecyclerAdapter: CharacterRecyclerAdapter = CharacterRecyclerAdapter(elements.toTypedArray()) { name ->
+                    onRecyclerClick(scroller, name)
+                }
+
+                charScroller.layoutManager = LinearLayoutManager(this)
+                charScroller.adapter = characterRecyclerAdapter
+            }
+            ITEM_S -> {
+                val itemsRecyclerAdapter: ItemsRecyclerAdapter = ItemsRecyclerAdapter(elements.toTypedArray()) { name ->
+                    onRecyclerClick(scroller, name)
+                }
+
+                itemScroller.layoutManager = LinearLayoutManager(this)
+                itemScroller.adapter = itemsRecyclerAdapter
+            }
         }
 
-        return false // Only way we're getting here is through an exception
+        return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -184,23 +208,6 @@ class ProjectViewerActivity : AppCompatActivity()
         // Imagine passing null as the critical parameter on which the entire activity depends on
         prj_name = intent.getStringExtra("name")!!
 
-        // TODO: Probably can be made better rather than having to redo the query
-        database = GameDatabaseHelper.getInstance(this)
-        val cursor: Cursor = database.getProjectFromName(prj_name)
-
-        Log.d("DB", "Projects found with name $prj_name: ${cursor.count}")
-
-        if (!cursor.moveToFirst())
-        {
-            finish()
-        }
-
-        var projDescription: String = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-        var project: Project = Project(prj_name.toString(), projDescription) // Converting string to string, WELCOME TO KOTLIN
-        AppCommons.setCurrentProject(project) // Added afterwards to communicate a project between activities, should probably refactor, but I'm in burnout
-        project.setCharacters(database.getAllCharactersFrom(project))
-        project.setItems(database.getAllItemsIn(project))
-
         // TODO: Make Recycler View of character
 
         // TODO: Make Recycler View of items
@@ -217,12 +224,12 @@ class ProjectViewerActivity : AppCompatActivity()
         // Character collection elements
         val newCharBtn:             Button      = findViewById(R.id.newCharBtn)
         val clearCharBtn:           Button      = findViewById(R.id.clearCharBtn)
-        val charScroller:           RecyclerView= findViewById(R.id.charRecView)
+        charScroller                            = findViewById(R.id.charRecView)
 
         // Item collection elements
         val newItemBtn:             Button      = findViewById(R.id.newItemBtn)
         val clearItemsBtn:          Button      = findViewById(R.id.clearItemsBtn)
-        val itemScroller:           RecyclerView= findViewById(R.id.itemRecView)
+        itemScroller                            = findViewById(R.id.itemRecView)
 
         // Narrative Framework elements
         val newLocBtn:              Button      = findViewById(R.id.newLocationBtn)
@@ -231,11 +238,18 @@ class ProjectViewerActivity : AppCompatActivity()
         val clearLocBtn:            Button      = findViewById(R.id.clearLocationsBtn)
         val clearFacBtn:            Button      = findViewById(R.id.clearFactionsBtn)
         val clearEvtBtn:            Button      = findViewById(R.id.clearEventsBtn)
+        nLocScroller                            = findViewById(R.id.locRecView)
+        nFacScroller                            = findViewById(R.id.facRecView)
+        nEvtScroller                            = findViewById(R.id.evtRecView)
+
 
         // Standard actions
 
         projectHeader.text = prj_name
-        descriptionEditView.setText(if (projDescription.isEmpty()) "Project description goes here..." else projDescription)
+
+        loadProject()
+
+        descriptionEditView.setText(if (project.getDescription().isEmpty()) "Project description goes here..." else project.getDescription())
 
         saveButton.setOnClickListener {
             // NOTE: The fields that aren't that easy to update automatically, like those of EditTexts for some reason, must be saved here
@@ -252,7 +266,8 @@ class ProjectViewerActivity : AppCompatActivity()
         }
 
         loadButton.setOnClickListener {
-            // TODO: Add loading functionality you goober
+            loadProject()
+            updateScroller(ALL_S)
         }
 
         delButton.setOnClickListener {
