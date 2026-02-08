@@ -3,10 +3,9 @@ package com.example.gamemanager.Recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gamemanager.Items.GameItem
 import com.example.gamemanager.R
 
-class ItemsRecyclerAdapter(private val items: Array<String>, private val onClick: (String) -> Unit): RecyclerView.Adapter<ItemsRecyclerHolder>()
+class LocationRecyclerAdapter(private val locations: Array<String>, private val onClick: (String) -> Unit): RecyclerView.Adapter<LocationRecyclerHolder>()
 {
     init
     {
@@ -16,20 +15,20 @@ class ItemsRecyclerAdapter(private val items: Array<String>, private val onClick
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ItemsRecyclerHolder
+    ): LocationRecyclerHolder
     {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.selector_button_layout, parent, false)
 
-        return ItemsRecyclerHolder(view, onClick)
+        return LocationRecyclerHolder(view, onClick)
     }
 
     override fun onBindViewHolder(
-        holder: ItemsRecyclerHolder,
+        holder: LocationRecyclerHolder,
         position: Int
     )
     {
-        holder.textView.text = items[position]
+        holder.textView.text = locations[position]
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = locations.size
 }

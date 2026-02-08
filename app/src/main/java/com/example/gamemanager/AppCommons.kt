@@ -2,7 +2,7 @@ package com.example.gamemanager
 
 object AppCommons
 {
-    private lateinit var currentProject: Project
+    private var currentProject: Project? = null
 
     public fun getCurrentProject() = currentProject
 

@@ -12,7 +12,14 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gamemanager.NarrativeElements.ElementType
+import com.example.gamemanager.Recycler.CharacterRecyclerAdapter
+import com.example.gamemanager.Recycler.EventRecyclerAdapter
+import com.example.gamemanager.Recycler.FactionRecyclerAdapter
+import com.example.gamemanager.Recycler.ItemsRecyclerAdapter
+import com.example.gamemanager.Recycler.LocationRecyclerAdapter
 
 class ProjectViewerActivity : AppCompatActivity()
 {
@@ -30,7 +37,7 @@ class ProjectViewerActivity : AppCompatActivity()
     private val ITEM_S = 1
     private val NAR_S = 2
 
-    private fun onRecyclerClick(scroller: Int, prj_name: String, name: String)
+    private fun onRecyclerClick(scroller: Int, name: String)
     {
         val intent: Intent
         when (scroller)
@@ -58,52 +65,105 @@ class ProjectViewerActivity : AppCompatActivity()
             else -> return false
         }
 
-        var elements: MutableList<String> = mutableListOf()
         try
         {
             val cursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
 
             Log.d("DB", "Elements found in $table table: ${cursor.count}")
 
+            // This is a bit sketchy because NAR_S handles 3 different Recycler Views, and since all narrative elements
+            // are grouped together in the database I have to do a custom search, overall implementing this
+            // shouldn't be too hard, figuring out what to do though ate up lots of time TwT
+            if (scroller == NAR_S)
+            {
+                var factions:   MutableList<String> = mutableListOf()
+                var locations:  MutableList<String> = mutableListOf()
+                var events:     MutableList<String> = mutableListOf()
+
+                if (cursor.moveToFirst())
+                {
+                    do
+                    {
+                        val name:   String  = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+                        val type:   Int     = cursor.getInt(cursor.getColumnIndexOrThrow("type"))
+
+                        when (type)
+                        {
+                            0 -> locations.add(name)
+                            1 -> factions.add(name)
+                            2 -> events.add(name)
+                            else ->
+                            {
+                                Log.e("DB", "Invalid narrative element type read: $type")
+                                throw RuntimeException("Read Invalid N. Element type from Database: $type")
+                            }
+                        }
+                    } while (cursor.moveToNext())
+
+                    val factionRecyclerAdapter: FactionRecyclerAdapter = FactionRecyclerAdapter(factions.toTypedArray()) { name ->
+                        onRecyclerClick(scroller, name)
+                    }
+
+                    val locationRecyclerAdapter: LocationRecyclerAdapter = LocationRecyclerAdapter(factions.toTypedArray()) { name ->
+                        onRecyclerClick(scroller, name)
+                    }
+
+                    val eventRecyclerAdapter: EventRecyclerAdapter = EventRecyclerAdapter(factions.toTypedArray()) { name ->
+                        onRecyclerClick(scroller, name)
+                    }
+
+                    nFacScroller.layoutManager = LinearLayoutManager(this)
+                    nLocScroller.layoutManager = LinearLayoutManager(this)
+                    nEvtScroller.layoutManager = LinearLayoutManager(this)
+
+                    nFacScroller.adapter = factionRecyclerAdapter
+                    nLocScroller.adapter = locationRecyclerAdapter
+                    nEvtScroller.adapter = eventRecyclerAdapter
+                }
+            }
+
+            var elements: MutableList<String> = mutableListOf()
             if (cursor.moveToFirst())
             {
                 do
                 {
-                    // We just get the name of the characters instead of loading them all
+                    // We just get the name of the objects instead of loading them all
                     val name:   String = cursor.getString(cursor.getColumnIndexOrThrow("name"))
 
                     elements.add(name)
-                } while (cursor.moveToNext())   // Fun fact - IDK if it was a typo or autocomplete or what, but this was moveToFirst(), which caused stack overflow
+                } while (cursor.moveToNext())
+
             }
 
-
+            // On each update, each scroller is assigned the same function with a different scroller parameter value
             when (scroller)
             {
                 CHAR_S -> {
-                    //val characterRecyclerAdapter: CharacterRecyclerAdapter = CharacterRecyclerAdapter(elements.toTypedArray()) {
-                        //onRecyclerClick(scroller, prj_name, name)
-                    //}
+                    val characterRecyclerAdapter: CharacterRecyclerAdapter = CharacterRecyclerAdapter(elements.toTypedArray()) { name ->
+                        onRecyclerClick(scroller, name)
+                    }
+
+                    charScroller.layoutManager = LinearLayoutManager(this)
+                    charScroller.adapter = characterRecyclerAdapter
                 }
                 ITEM_S -> {
+                    val itemsRecyclerAdapter: ItemsRecyclerAdapter = ItemsRecyclerAdapter(elements.toTypedArray()) { name ->
+                        onRecyclerClick(scroller, name)
+                    }
 
-                }
-                NAR_S -> {
-
+                    itemScroller.layoutManager = LinearLayoutManager(this)
+                    itemScroller.adapter = itemsRecyclerAdapter
                 }
             }
-            /*val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray()) { project ->
-                onRecyclerClick(project)
-            }
 
-            scroller.layoutManager = LinearLayoutManager(this)
-            scroller.adapter = projectRecyclerAdapter*/
+            return true
         }
         catch (e: RuntimeException)
         {
-            Toast.makeText(this, "ERROR: projects table doesn't exist", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "ERROR: nonexistent table or invalid type read, check logcat", Toast.LENGTH_LONG).show()
         }
 
-        return true;
+        return false // Only way we're getting here is through an exception
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -122,19 +182,13 @@ class ProjectViewerActivity : AppCompatActivity()
         val intent = getIntent()
 
         // Imagine passing null as the critical parameter on which the entire activity depends on
-        var projectName: String? = intent.getStringExtra("name")
-
-        if (projectName == null)
-        {
-            Toast.makeText(this, "RECEIVED NULL NAME - GOING BACK", Toast.LENGTH_SHORT).show()
-            finish()
-        }
+        prj_name = intent.getStringExtra("name")!!
 
         // TODO: Probably can be made better rather than having to redo the query
         database = GameDatabaseHelper.getInstance(this)
-        val cursor: Cursor = database.getProjectFromName(projectName)
+        val cursor: Cursor = database.getProjectFromName(prj_name)
 
-        Log.d("DB", "Projects found with name $projectName: ${cursor.count}")
+        Log.d("DB", "Projects found with name $prj_name: ${cursor.count}")
 
         if (!cursor.moveToFirst())
         {
@@ -142,7 +196,7 @@ class ProjectViewerActivity : AppCompatActivity()
         }
 
         var projDescription: String = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-        var project: Project = Project(projectName.toString(), projDescription) // Converting string to string, WELCOME TO KOTLIN
+        var project: Project = Project(prj_name.toString(), projDescription) // Converting string to string, WELCOME TO KOTLIN
         AppCommons.setCurrentProject(project) // Added afterwards to communicate a project between activities, should probably refactor, but I'm in burnout
         project.setCharacters(database.getAllCharactersFrom(project))
         project.setItems(database.getAllItemsIn(project))
@@ -180,7 +234,7 @@ class ProjectViewerActivity : AppCompatActivity()
 
         // Standard actions
 
-        projectHeader.text = projectName
+        projectHeader.text = prj_name
         descriptionEditView.setText(if (projDescription.isEmpty()) "Project description goes here..." else projDescription)
 
         saveButton.setOnClickListener {

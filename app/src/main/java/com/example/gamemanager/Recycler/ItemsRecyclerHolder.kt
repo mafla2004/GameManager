@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gamemanager.R
 
-class ItemsRecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+class ItemsRecyclerHolder(itemView: View, val onClick: (String) -> Unit) : RecyclerView.ViewHolder(itemView)
 {
     lateinit var textView: TextView
 
@@ -13,6 +13,8 @@ class ItemsRecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     {
         textView = itemView.findViewById(R.id.btnText)
 
-
+        itemView.setOnClickListener {
+            onClick(textView.text.toString())
+        }
     }
 }

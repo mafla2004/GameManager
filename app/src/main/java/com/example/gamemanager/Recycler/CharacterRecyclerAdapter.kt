@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gamemanager.R
 import com.example.gamemanager.Character.Character
 
-class CharacterRecyclerAdapter(private val characters: Array<String>, private val onClick: (Int, String, String) -> Unit): RecyclerView.Adapter<CharacterRecyclerHolder>()
+class CharacterRecyclerAdapter(private val characters: Array<String>, private val onClick: (String) -> Unit): RecyclerView.Adapter<CharacterRecyclerHolder>()
 {
     init
     {

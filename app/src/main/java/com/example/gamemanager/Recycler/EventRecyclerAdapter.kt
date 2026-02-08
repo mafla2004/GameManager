@@ -3,10 +3,9 @@ package com.example.gamemanager.Recycler
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.gamemanager.Items.GameItem
 import com.example.gamemanager.R
 
-class ItemsRecyclerAdapter(private val items: Array<String>, private val onClick: (String) -> Unit): RecyclerView.Adapter<ItemsRecyclerHolder>()
+class EventRecyclerAdapter(private val events: Array<String>, private val onClick: (String) -> Unit): RecyclerView.Adapter<EventRecyclerHolder>()
 {
     init
     {
@@ -16,20 +15,20 @@ class ItemsRecyclerAdapter(private val items: Array<String>, private val onClick
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ItemsRecyclerHolder
+    ): EventRecyclerHolder
     {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.selector_button_layout, parent, false)
 
-        return ItemsRecyclerHolder(view, onClick)
+        return EventRecyclerHolder(view, onClick)
     }
 
     override fun onBindViewHolder(
-        holder: ItemsRecyclerHolder,
+        holder: EventRecyclerHolder,
         position: Int
     )
     {
-        holder.textView.text = items[position]
+        holder.textView.text = events[position]
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = events.size
 }

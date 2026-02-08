@@ -19,7 +19,7 @@ class CreateCharacterActivity : AppCompatActivity()
     private lateinit var selTypeBtn: Button
     private lateinit var selText: TextView
 
-    private val project: Project = AppCommons.getCurrentProject()
+    private val project: Project? = AppCommons.getCurrentProject()
     private var selection: String = R.string.STD_CHAR.toString()
 
     // So many things to do...
@@ -93,26 +93,26 @@ class CreateCharacterActivity : AppCompatActivity()
                 when (selection)
                 {
                     R.string.GAME_CHAR.toString() -> char = GameCharacter(
-                        AppCommons.getCurrentProject(),
+                        project!!,
                         charName,
                         charSpecies,
                         charBirth,
                         charAge)
                     R.string.RPG_CHAR.toString() -> char = RPGCharacter(
-                        AppCommons.getCurrentProject(),
+                        project!!,
                         charName,
                         charSpecies,
                         charBirth,
                         charAge)
                     else -> char = Character(
-                        AppCommons.getCurrentProject(),
+                        project!!,
                         charName,
                         charSpecies,
                         charBirth,
                         charAge)
                 }
 
-                if (AppCommons.getCurrentProject().addCharacter(char))
+                if (project!!.addCharacter(char))
                 {
                     Toast.makeText(this, "Character successfully added", Toast.LENGTH_SHORT).show()
                     finish()
