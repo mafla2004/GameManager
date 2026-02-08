@@ -1,10 +1,11 @@
-package com.example.gamemanager
+package com.example.gamemanager.Character
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.gamemanager.R
 
 class CharacterViewerActivity : AppCompatActivity()
 {

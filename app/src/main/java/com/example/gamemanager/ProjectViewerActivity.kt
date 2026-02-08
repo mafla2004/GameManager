@@ -14,6 +14,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.gamemanager.Character.*
+import com.example.gamemanager.Items.CreateItemActivity
+import com.example.gamemanager.NarrativeElements.*
 import com.example.gamemanager.Recycler.CharacterRecyclerAdapter
 import com.example.gamemanager.Recycler.EventRecyclerAdapter
 import com.example.gamemanager.Recycler.FactionRecyclerAdapter
@@ -319,13 +322,15 @@ class ProjectViewerActivity : AppCompatActivity()
         }
 
         clearCharBtn.setOnClickListener {
-
+            val clearCharIntent: Intent = Intent(this, CharClearConfirmDialog::class.java)
+            startActivity(clearCharIntent)
         }
 
         // Item collection actions
 
         newItemBtn.setOnClickListener {
-
+            val newItemIntent: Intent = Intent(this, CreateItemActivity::class.java)
+            startActivity(newItemIntent)
         }
 
         clearItemsBtn.setOnClickListener {
@@ -335,7 +340,8 @@ class ProjectViewerActivity : AppCompatActivity()
         // Narrative Framework actions
 
         newLocBtn.setOnClickListener {
-
+            val newLocationIntent: Intent = Intent(this, CreateNarrativeElementActivity::class.java)
+            newLocationIntent.putExtra("type", LOCATION)
         }
 
         clearLocBtn.setOnClickListener {
@@ -343,7 +349,8 @@ class ProjectViewerActivity : AppCompatActivity()
         }
 
         newFacBtn.setOnClickListener {
-
+            val newFactionIntent: Intent = Intent(this, CreateNarrativeElementActivity::class.java)
+            newFactionIntent.putExtra("type", FACTION)
         }
 
         clearFacBtn.setOnClickListener {
@@ -351,7 +358,8 @@ class ProjectViewerActivity : AppCompatActivity()
         }
 
         newEvtBtn.setOnClickListener {
-
+            val newEventIntent: Intent = Intent(this, CreateNarrativeElementActivity::class.java)
+            newEventIntent.putExtra("type", EVENT)
         }
 
         clearEvtBtn.setOnClickListener {

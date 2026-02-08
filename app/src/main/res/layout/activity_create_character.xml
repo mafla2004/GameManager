@@ -5,7 +5,7 @@
     android:id="@+id/bckgr"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CreateCharacterActivity">
+    tools:context=".Character.CreateCharacterActivity">
 
     <Button
         android:id="@+id/createChar"

@@ -12,7 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GameManager">
         <activity
-            android:name=".CreateCharacterActivity"
+            android:name=".NarrativeElements.CreateNarrativeElementActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".Items.CreateItemActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".Character.CharClearConfirmDialog"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".Character.CreateCharacterActivity"
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Dialog" />
         <activity
@@ -25,7 +37,7 @@
             android:name=".ProjectViewerActivity"
             android:exported="false" />
         <activity
-            android:name=".CharacterViewerActivity"
+            android:name=".Character.CharacterViewerActivity"
             android:exported="false" />
         <activity
             android:name=".RequestClearConfirmDialog"
