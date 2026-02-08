@@ -257,6 +257,26 @@ class ProjectViewerActivity : AppCompatActivity()
 
             if (database.updateObject(project))
             {
+                for (c in project.getCharacters())
+                {
+                    if (database.getCharacter(project, c.getName()) == null)
+                    {
+                        Log.d("DB", "Adding character ${c.getName()}")
+                        database.addObject(c)
+                        continue
+                    }
+                    database.updateObject(c)
+                }
+                for (i in project.getItems())
+                {
+                    // TODO: Add equivalent of if getCharacter
+                    database.updateObject(i)
+                }
+                for (n in project.getNarrativeElements())
+                {
+                    // TODO: Add equivalent of if getCharacter
+                    database.updateObject(n)
+                }
                 Toast.makeText(this, "Project saved successfully", Toast.LENGTH_SHORT).show()
             }
             else

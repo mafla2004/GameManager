@@ -423,7 +423,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
         SQLiteDatabase db = getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + CHAR_TABLE + " WHERE (prj_name IS " +  owner.getName() + ")", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM " + CHAR_TABLE + " WHERE (prj_name IS '" +  owner.getName() + "')", null);
         if (!cursor.moveToFirst())
         {
             return null;
