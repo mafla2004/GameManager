@@ -5,7 +5,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gamemanager.R
 
-class CharacterRecyclerHolder(itemView: View /* TODO: Add lambda */): RecyclerView.ViewHolder(itemView)
+class CharacterRecyclerHolder(itemView: View, val onClick: (Int, String, String) -> Unit): RecyclerView.ViewHolder(itemView)
 {
     lateinit var textView: TextView
 

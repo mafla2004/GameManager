@@ -19,6 +19,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
     // This database, in order to work with the frameworks of character and, in the future, of item, which both have multiple subclasses,
     // must be at least in 3rd normal form.
 
+    // TODO: Refactor at some point, this is horrible
+
     private static GameDatabaseHelper sInstance; // Implementing singleton pattern
 
     private static final String DBNAME = "games_database.db";
@@ -372,8 +374,6 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
     public Character[] getAllCharactersFrom(Project owner)
     {
         // TODO: Remake, make it similar to getAllItemsIn(project)
-
-        // Doing things INEFFICIENTLY
 
         int count = getCharacterCountIn(owner);
         Log.d("DB", "Count: " + count);

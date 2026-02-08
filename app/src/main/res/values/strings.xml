@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">GameManager</string>
+
+    <string name="STD_CHAR">Standard</string>
+    <string name="GAME_CHAR">Game Character</string>
+    <string name="RPG_CHAR">RPG Character</string>
 </resources>

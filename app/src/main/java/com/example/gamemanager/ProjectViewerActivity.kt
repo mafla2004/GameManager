@@ -16,24 +16,94 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ProjectViewerActivity : AppCompatActivity()
 {
+    private lateinit var database: GameDatabaseHelper
+    private lateinit var prj_name: String
+
+    private lateinit var charScroller: RecyclerView
+    private lateinit var itemScroller: RecyclerView
+    private lateinit var nFacScroller: RecyclerView
+    private lateinit var nLocScroller: RecyclerView
+    private lateinit var nEvtScroller: RecyclerView
+
+    private val ALL_S = Int.MAX_VALUE
     private val CHAR_S = 0
     private val ITEM_S = 1
     private val NAR_S = 2
 
-    private fun onCharRecClick(scroller: Int, prj_name: String, name: String)
+    private fun onRecyclerClick(scroller: Int, prj_name: String, name: String)
     {
         val intent: Intent
         when (scroller)
         {
-            0 -> intent = Intent(this, CharacterViewerActivity()::class.java)
-            1 -> intent = Intent(this, ItemViewerActivity()::class.java)
-            2 -> intent = Intent(this, NarrativeViewerActivity()::class.java)
+            CHAR_S -> intent = Intent(this, CharacterViewerActivity()::class.java)
+            ITEM_S -> intent = Intent(this, ItemViewerActivity()::class.java)
+            NAR_S  -> intent = Intent(this, NarrativeViewerActivity()::class.java)
             else -> return
         }
 
         intent.putExtra("prj_name", prj_name)
         intent.putExtra("name", name)
         startActivity(intent)
+    }
+
+    private fun updateScroller(scroller: Int): Boolean
+    {
+        val table: String
+        when (scroller)
+        {
+            ALL_S -> return updateScroller(CHAR_S) && updateScroller(ITEM_S) && updateScroller(NAR_S)
+            CHAR_S -> table = GameDatabaseHelper.CHAR_TABLE
+            ITEM_S -> table = GameDatabaseHelper.ITEM_TABLE
+            NAR_S  -> table = GameDatabaseHelper.NELM_TABLE
+            else -> return false
+        }
+
+        var elements: MutableList<String> = mutableListOf()
+        try
+        {
+            val cursor: Cursor = database.getAllEntriesFromTable(GameDatabaseHelper.PROJ_TABLE)
+
+            Log.d("DB", "Elements found in $table table: ${cursor.count}")
+
+            if (cursor.moveToFirst())
+            {
+                do
+                {
+                    // We just get the name of the characters instead of loading them all
+                    val name:   String = cursor.getString(cursor.getColumnIndexOrThrow("name"))
+
+                    elements.add(name)
+                } while (cursor.moveToNext())   // Fun fact - IDK if it was a typo or autocomplete or what, but this was moveToFirst(), which caused stack overflow
+            }
+
+
+            when (scroller)
+            {
+                CHAR_S -> {
+                    //val characterRecyclerAdapter: CharacterRecyclerAdapter = CharacterRecyclerAdapter(elements.toTypedArray()) {
+                        //onRecyclerClick(scroller, prj_name, name)
+                    //}
+                }
+                ITEM_S -> {
+
+                }
+                NAR_S -> {
+
+                }
+            }
+            /*val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray()) { project ->
+                onRecyclerClick(project)
+            }
+
+            scroller.layoutManager = LinearLayoutManager(this)
+            scroller.adapter = projectRecyclerAdapter*/
+        }
+        catch (e: RuntimeException)
+        {
+            Toast.makeText(this, "ERROR: projects table doesn't exist", Toast.LENGTH_LONG).show()
+        }
+
+        return true;
     }
 
     override fun onCreate(savedInstanceState: Bundle?)
@@ -43,7 +113,7 @@ class ProjectViewerActivity : AppCompatActivity()
         enableEdgeToEdge()
         setContentView(R.layout.activity_project_viewer)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.bckgr)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
@@ -61,7 +131,7 @@ class ProjectViewerActivity : AppCompatActivity()
         }
 
         // TODO: Probably can be made better rather than having to redo the query
-        val database: GameDatabaseHelper = GameDatabaseHelper.getInstance(this)
+        database = GameDatabaseHelper.getInstance(this)
         val cursor: Cursor = database.getProjectFromName(projectName)
 
         Log.d("DB", "Projects found with name $projectName: ${cursor.count}")
@@ -72,7 +142,8 @@ class ProjectViewerActivity : AppCompatActivity()
         }
 
         var projDescription: String = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-        var project: Project = Project(projectName.toString(), projDescription) // Converting string to string, WELCOME TO FUCKING KOTLIN
+        var project: Project = Project(projectName.toString(), projDescription) // Converting string to string, WELCOME TO KOTLIN
+        AppCommons.setCurrentProject(project) // Added afterwards to communicate a project between activities, should probably refactor, but I'm in burnout
         project.setCharacters(database.getAllCharactersFrom(project))
         project.setItems(database.getAllItemsIn(project))
 
@@ -154,7 +225,8 @@ class ProjectViewerActivity : AppCompatActivity()
         // Character collection actions
 
         newCharBtn.setOnClickListener {
-
+            val newCharIntent: Intent = Intent(this, CreateCharacterActivity::class.java)
+            startActivity(newCharIntent)
         }
 
         clearCharBtn.setOnClickListener {
@@ -196,5 +268,12 @@ class ProjectViewerActivity : AppCompatActivity()
         clearEvtBtn.setOnClickListener {
 
         }
+    }
+
+    override fun onResume()
+    {
+        super.onResume()
+
+        updateScroller(ALL_S)
     }
 }

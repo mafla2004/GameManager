@@ -3,11 +3,8 @@ package com.example.gamemanager
 import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
-import android.util.AttributeSet
 import android.util.Log
 import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +16,13 @@ import com.example.gamemanager.Recycler.ProjectRecyclerAdapter
 
 class MainActivity : AppCompatActivity()
 {
+    // GENERAL PROJECTS TODOS
+    // TODO: Refactor XML code to use more constants instead of hardcoded literals
+    // TODO: Refactor database for same reason, the way SQLite code is handled is very error prone
+    // TODO: VERY IMPORTANT - Add sensor code and logic to switch between dark mode and light mode depending on illumination
+    // For the above - see if it is possble to define a color variable in XML and assign all elements in the XML their color variables,
+    // then switch value of color variable as needed.
+
     private lateinit var database: GameDatabaseHelper
     private lateinit var scroller: RecyclerView
 
@@ -46,15 +50,15 @@ class MainActivity : AppCompatActivity()
                     val name:   String = projCursor.getString(projCursor.getColumnIndexOrThrow("name"))
 
                     projects.add(name)
-                } while (projCursor.moveToNext())   // Fun fact - IDK if it was a typo or autocomplete or what, but this was moveToFirst(), which caused stack overflow
+                } while (projCursor.moveToNext())   // Fun fact - IDK if it was a typo or autocomplete or what, but this was moveToFirst(), which caused an infinite loop and stack overflow
             }
 
             val projectRecyclerAdapter: ProjectRecyclerAdapter = ProjectRecyclerAdapter(projects.toTypedArray()) { project ->
                 onRecyclerClick(project)
             }
             // Kotlin be like:
-            // "toArray()" That is the fakest shit I've ever seen in my life
-            // "toTypedArray()" HOLY SHIT!!! OwO
+            // "toArray()" That is the fakest thing I've ever seen in my life
+            // "toTypedArray()" HOLY CRAP!!! OwO
 
             scroller.layoutManager = LinearLayoutManager(this)
             scroller.adapter = projectRecyclerAdapter
@@ -76,11 +80,11 @@ class MainActivity : AppCompatActivity()
         val newProjectButton:   Button          = findViewById(R.id.addProjectButton)
         val clearPrjButton:     Button          = findViewById(R.id.clearPrjButton)
 
-        scroller = findViewById(R.id.projectScroller)   // This one be special
+        scroller = findViewById(R.id.projectScroller)
 
         database = GameDatabaseHelper.getInstance(this)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.bckgr)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets

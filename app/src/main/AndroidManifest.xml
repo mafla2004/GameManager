@@ -12,6 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GameManager">
         <activity
+            android:name=".CreateCharacterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
             android:name=".NarrativeViewerActivity"
             android:exported="false" />
         <activity

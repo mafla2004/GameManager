@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gamemanager.R
 import com.example.gamemanager.Character.Character
 
-class CharacterRecyclerAdapter(private val characters: Array<Character> /* TODO: Add lambda for onClick */): RecyclerView.Adapter<CharacterRecyclerHolder>()
+class CharacterRecyclerAdapter(private val characters: Array<String>, private val onClick: (Int, String, String) -> Unit): RecyclerView.Adapter<CharacterRecyclerHolder>()
 {
     init
     {
@@ -20,7 +20,7 @@ class CharacterRecyclerAdapter(private val characters: Array<Character> /* TODO:
     {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.selector_button_layout, parent, false)
 
-        return CharacterRecyclerHolder(view /* TODO: Add lambda call here*/)
+        return CharacterRecyclerHolder(view, onClick)
     }
 
     override fun onBindViewHolder(
@@ -28,7 +28,7 @@ class CharacterRecyclerAdapter(private val characters: Array<Character> /* TODO:
         position: Int
     )
     {
-        holder.textView.text = characters[position].getName()
+        holder.textView.text = characters[position]
     }
 
     override fun getItemCount(): Int = characters.size
