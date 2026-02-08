@@ -58,6 +58,10 @@ class Project(private var Name: String = "New Project", private var Description:
         }
     }
 
+    fun clearCharacters()   = characters.clear()
+    fun clearItems()        = items.clear()
+    fun clearNarrative()    = narrative.clear()
+
     override fun getContentValues(): Array<ContentValues>
     {
         val cv: ContentValues = ContentValues().apply {

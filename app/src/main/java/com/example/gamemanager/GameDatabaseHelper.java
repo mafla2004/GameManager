@@ -395,6 +395,33 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         return ret;
     }
 
+    public void deleteCharacter(Project owner, String name)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        // TODO: Refactor database to use this here syntax
+        db.delete(CHAR_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+        db.delete(GAMC_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+        db.delete(RPG_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+    }
+
+    public void deleteItem(Project owner, String name)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(ITEM_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+        db.delete(WEPN_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+        db.delete(CONS_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+        db.delete(RGDW_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+    }
+
+    public void deleteNarrativeElement(Project owner, String name)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(NELM_TABLE, "(prj_name IS '?') AND (name IS '?')", new String[]{owner.getName(), name});
+    }
+
     public int getCharacterCountIn(Project owner)
     {
         SQLiteDatabase db = getReadableDatabase();
@@ -448,7 +475,131 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             }
         }
 
+        cursor.close();
+
         return ret;
+    }
+
+    // TODO: These 3 functions could be condensed into one with an extra param to specify what to look for, but readability could suffer from it
+    public String[] getAllCharacterNamesFrom(Project owner)
+    {
+        int count;
+        String ret[];
+        String cols[] = {"name"};
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(CHAR_TABLE, cols, "prj_name IS ?", new String[]{owner.getName()}, null, null, null);
+        if (!cursor.moveToFirst())
+        {
+            return null;
+        }
+
+        count = cursor.getCount();
+        ret = new String[count];
+        for (int i = 0; i < count; i++)
+        {
+            ret[i] = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            if (!cursor.moveToNext())
+            {
+                Log.e("DB", "moveToNext operation failed at index " + i + " before count loop ended");
+                break;
+            }
+        }
+
+        cursor.close();
+
+        return ret;
+    }
+
+    public String[] getAllItemNamesFrom(Project owner)
+    {
+        int count;
+        String ret[];
+        String cols[] = {"name"};
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(ITEM_TABLE, cols, "prj_name IS ?", new String[]{owner.getName()}, null, null, null);
+        if (!cursor.moveToFirst())
+        {
+            return null;
+        }
+
+        count = cursor.getCount();
+        ret = new String[count];
+        for (int i = 0; i < count; i++)
+        {
+            ret[i] = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            if (!cursor.moveToNext())
+            {
+                Log.e("DB", "moveToNext operation failed at index " + i + " before count loop ended");
+                break;
+            }
+        }
+
+        cursor.close();
+
+        return ret;
+    }
+
+    public String[] getAllNarrativeElementsNamesFrom(Project owner)
+    {
+        int count;
+        String ret[];
+        String cols[] = {"name"};
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(NELM_TABLE, cols, "prj_name IS ?", new String[]{owner.getName()}, null, null, null);
+        if (!cursor.moveToFirst())
+        {
+            return null;
+        }
+
+        count = cursor.getCount();
+        ret = new String[count];
+        for (int i = 0; i < count; i++)
+        {
+            ret[i] = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            if (!cursor.moveToNext())
+            {
+                Log.e("DB", "moveToNext operation failed at index " + i + " before count loop ended");
+                break;
+            }
+        }
+
+        cursor.close();
+
+        return ret;
+    }
+
+    // Fun fact - the three functions above? Yeah turns out I didn't need them, but could still use them so not removing them
+
+    public void deleteAllCharactersFrom(Project owner)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(CHAR_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
+        db.delete(GAMC_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
+        db.delete(RPG_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
+    }
+
+    public void deleteAllItemsFrom(Project owner)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(ITEM_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
+        db.delete(CONS_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
+        db.delete(WEPN_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
+        db.delete(RGDW_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
+    }
+
+    public void deleteAllNarrativeElementsFrom(Project owner)
+    {
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(NELM_TABLE, "(prj_name IS '?')", new String[]{owner.getName()});
     }
 
     public int getProjectCount()

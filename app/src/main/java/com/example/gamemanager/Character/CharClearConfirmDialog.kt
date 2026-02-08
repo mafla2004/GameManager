@@ -34,10 +34,7 @@ class CharClearConfirmDialog : AppCompatActivity()
         confirmButton.setOnClickListener {
             val database: GameDatabaseHelper = GameDatabaseHelper.getInstance(this)
 
-            for (c in AppCommons.getCurrentProject()!!.getCharacters())
-            {
-                database.removeObject(c)
-            }
+            AppCommons.getCurrentProject()!!.clearCharacters()  // We don't clear them from the DB because we await a save
 
             finish()
         }
