@@ -8,4 +8,164 @@
     android:background="@color/bckgr_gray"
     tools:context=".Character.CharacterViewerActivity">
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Born:"
+        android:textColor="@color/lining"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/characterHeader" />
+
+    <TextView
+        android:id="@+id/characterHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/lining"
+        android:textSize="40dp"
+        android:text="Your character"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/mainScroller"
+        android:layout_width="409dp"
+        android:layout_height="500dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="88dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/characterHeader"
+        app:layout_constraintVertical_bias="1.0">
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/saveBtn"
+        android:layout_width="100dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Save"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
+
+    <Button
+        android:id="@+id/loadBtn"
+        android:layout_width="100dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Load"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
+
+    <Button
+        android:id="@+id/delBtn"
+        android:layout_width="100dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Delete"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Species:"
+        android:textColor="@color/lining"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/characterHeader" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Age:"
+        android:textColor="@color/lining"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/characterHeader" />
+
+    <EditText
+        android:id="@+id/speciesEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Species here"
+        android:inputType="text"
+        android:textAlignment="textStart"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/textView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+    <EditText
+        android:id="@+id/birthEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Birth info here"
+        android:inputType="text"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <EditText
+        android:id="@+id/ageEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Age here"
+        android:inputType="text"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/textView5"
+        app:layout_constraintStart_toStartOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
 </androidx.constraintlayout.widget.ConstraintLayout>
