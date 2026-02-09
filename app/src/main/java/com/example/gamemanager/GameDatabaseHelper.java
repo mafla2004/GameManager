@@ -103,6 +103,14 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             return false;
         }
 
+        // TODO: Remove once fixed
+        String debTab = "";
+        for (String t : tables)
+        {
+            debTab += t + " ";
+        }
+        Log.d("DB", "Tables object will be saved into: " + debTab);
+
         /*  "Why are we doing this?"
         *   Inheritance is not a thing in SQL and each subclass of character or really any class is gonna have data
         *   that its parents and other sibling and nephew classes don't have, the amount and types of data stored
@@ -304,10 +312,12 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
 
                 // TODO: Implement D&D character maybe, low priority and high refactoring
 
+                Log.d("DB", "Character " + name + " is RPG character");
                 ret = new RPGCharacter(owner, name, species, birth, age, maxHealth, curHealth, ownerPlayer);
             }
             else
             {
+                Log.d("DB", "Character " + name + " is Game character");
                 ret = new GameCharacter(owner, name, species, birth, age, maxHealth);
             }
 

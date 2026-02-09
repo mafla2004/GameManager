@@ -1,6 +1,7 @@
 package com.example.gamemanager.Character
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -21,7 +22,7 @@ class CreateCharacterActivity : AppCompatActivity()
     private lateinit var selText: TextView
 
     private val project: Project? = AppCommons.getCurrentProject()
-    private var selection: String = R.string.STD_CHAR.toString()
+    private var selection: String = ""
 
     // So many things to do...
     // So little energy to do them...
@@ -93,25 +94,38 @@ class CreateCharacterActivity : AppCompatActivity()
 
                 when (selection)
                 {
-                    R.string.GAME_CHAR.toString() -> char = GameCharacter(
-                        project!!,
-                        charName,
-                        charSpecies,
-                        charBirth,
-                        charAge)
-                    R.string.RPG_CHAR.toString() -> char = RPGCharacter(
-                        project!!,
-                        charName,
-                        charSpecies,
-                        charBirth,
-                        charAge)
-                    else -> char = Character(
-                        project!!,
-                        charName,
-                        charSpecies,
-                        charBirth,
-                        charAge)
+                    "Game Character" -> {
+                        Log.d("CCA", "Creating Game Character")
+                        char = GameCharacter(
+                            project!!,
+                            charName,
+                            charSpecies,
+                            charBirth,
+                            charAge)
+                    }
+                    "RPG Character" -> {
+                        Log.d("CCA", "Creating RPG Character")
+                        char = RPGCharacter(
+                            project!!,
+                            charName,
+                            charSpecies,
+                            charBirth,
+                            charAge
+                        )
+                    }
+                    else -> {
+                        Log.d("CCA", "Creating Standard Character")
+                        char = Character(
+                            project!!,
+                            charName,
+                            charSpecies,
+                            charBirth,
+                            charAge
+                        )
+                    }
                 }
+
+                Log.d("CCA", "SELECTION: $selection")
 
                 if (project!!.addCharacter(char))
                 {

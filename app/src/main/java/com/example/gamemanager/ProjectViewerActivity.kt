@@ -53,7 +53,7 @@ class ProjectViewerActivity : AppCompatActivity()
 
     private fun loadProject(): Boolean
     {
-        if (AppCommons.getCurrentProject() != null)
+        if (AppCommons.getCurrentProject() != null && AppCommons.getCurrentProject()!!.getName().equals(prj_name))
         {
             return true
         }
@@ -250,7 +250,11 @@ class ProjectViewerActivity : AppCompatActivity()
 
         projectHeader.text = prj_name
 
-        loadProject()
+        if (!loadProject())
+        {
+            Toast.makeText(this, "Could not load project from memory", Toast.LENGTH_SHORT).show()
+            finish()
+        }
 
         descriptionEditView.setText(if (project.getDescription().isEmpty()) "Project description goes here..." else project.getDescription())
 

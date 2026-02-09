@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bckgr"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bckgr_gray"
+    tools:context=".Character.CharacterViewerActivity">
+
+    <TextView
+        android:id="@+id/birthHeader"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Born:"
+        android:textColor="@color/lining"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/characterHeader" />
+
+    <TextView
+        android:id="@+id/characterHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:textColor="@color/lining"
+        android:textSize="40dp"
+        android:text="Your character"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:id="@+id/mainScroller"
+        android:layout_width="409dp"
+        android:layout_height="600dp"
+        android:layout_marginBottom="88dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/birthEditor"
+        app:layout_constraintVertical_bias="0.954">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/aliasesHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Aliases:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/aliasEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Aliases here"
+                android:inputType="text"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/aliasesHeader" />
+
+            <TextView
+                android:id="@+id/aspectHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Aspect:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toBottomOf="@id/aliasEditor" />
+
+            <EditText
+                android:id="@+id/aspectEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Aspect here"
+                android:inputType="textMultiLine"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/aspectHeader" />
+
+            <TextView
+                android:id="@+id/persHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Personality:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toBottomOf="@id/aspectEditor" />
+
+            <EditText
+                android:id="@+id/persEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Personality here"
+                android:inputType="textMultiLine"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/persHeader" />
+
+            <TextView
+                android:id="@+id/invHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Inventory:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toBottomOf="@id/persEditor" />
+
+            <EditText
+                android:id="@+id/invEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Inventory here"
+                android:inputType="textMultiLine"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/invHeader" />
+
+            <TextView
+                android:id="@+id/storyHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Backstory:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toBottomOf="@id/invEditor" />
+
+            <EditText
+                android:id="@+id/storyEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Backstory here"
+                android:inputType="textMultiLine"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/storyHeader" />
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/saveBtn"
+        android:layout_width="100dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Save"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
+
+    <Button
+        android:id="@+id/loadBtn"
+        android:layout_width="100dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Load"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
+
+    <Button
+        android:id="@+id/delBtn"
+        android:layout_width="100dp"
+        android:layout_height="58dp"
+        android:backgroundTint="@color/frgr_gray"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Delete"
+        android:textColor="@color/lining"
+        android:textSize="20dp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
+
+    <TextView
+        android:id="@+id/speciesHeader"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Species:"
+        android:textColor="@color/lining"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/characterHeader" />
+
+    <TextView
+        android:id="@+id/ageHeader"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Age:"
+        android:textColor="@color/lining"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/characterHeader" />
+
+    <EditText
+        android:id="@+id/speciesEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Species here"
+        android:inputType="text"
+        android:textAlignment="textStart"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/speciesHeader"
+        app:layout_constraintTop_toBottomOf="@+id/speciesHeader" />
+
+    <EditText
+        android:id="@+id/birthEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Birth info here"
+        android:inputType="text"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/birthHeader"
+        app:layout_constraintStart_toStartOf="@+id/birthHeader"
+        app:layout_constraintTop_toBottomOf="@+id/birthHeader" />
+
+    <EditText
+        android:id="@+id/ageEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Age here"
+        android:inputType="text"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/ageHeader"
+        app:layout_constraintStart_toStartOf="@+id/ageHeader"
+        app:layout_constraintTop_toBottomOf="@+id/ageHeader" />
+
+    <TextView
+        android:id="@+id/maxHealthHeader"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Max Health:"
+        android:textColor="@color/lining"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/speciesEditor" />
+
+    <EditText
+        android:id="@+id/maxHealthEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Max health here"
+        android:inputType="number"
+        android:textAlignment="textStart"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/maxHealthHeader"
+        app:layout_constraintTop_toBottomOf="@+id/maxHealthHeader" />
+
+    <TextView
+        android:id="@+id/curHealthHeader"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Current Health:"
+        android:textColor="@color/lining"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/birthEditor" />
+
+    <EditText
+        android:id="@+id/curHealthEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Current health here"
+        android:inputType="number"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/birthHeader"
+        app:layout_constraintStart_toStartOf="@+id/curHealthHeader"
+        app:layout_constraintTop_toBottomOf="@+id/curHealthHeader" />
+
+    <TextView
+        android:id="@+id/ownerHeader"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="sans-serif-condensed-medium"
+        android:text="Owner:"
+        android:textColor="@color/lining"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ageEditor" />
+
+    <EditText
+        android:id="@+id/ownerEditor"
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-4dp"
+        android:ems="10"
+        android:fontFamily="sans-serif-condensed"
+        android:hint="Owner player here"
+        android:inputType="text"
+        android:textColor="@color/lining"
+        android:textColorHint="@color/lining"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/ownerHeader"
+        app:layout_constraintStart_toStartOf="@+id/ownerHeader"
+        app:layout_constraintTop_toBottomOf="@+id/ownerHeader" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

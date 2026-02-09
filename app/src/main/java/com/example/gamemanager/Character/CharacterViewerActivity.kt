@@ -30,6 +30,11 @@ class CharacterViewerActivity : AppCompatActivity()
     private lateinit var persEditor:     EditText
     private lateinit var storyEditor:    EditText
 
+    // Views for GameCharacter
+    private lateinit var mHealthEditor:  EditText
+    private lateinit var invEditor:      EditText
+
+
     private fun loadValues(): Boolean
     {
         if (character == null)
@@ -76,17 +81,34 @@ class CharacterViewerActivity : AppCompatActivity()
     {
         super.onCreate(savedInstanceState)
 
+        val charName: String = getIntent().getStringExtra("name")!!
+        character = AppCommons.getCurrentProject()!!.getCharacter(charName)
+
         enableEdgeToEdge()
-        setContentView(R.layout.activity_character_viewer)
+        // BIG BRAIN MOMENT: Multiple layouts in just one activity
+        when (character)
+        {
+            is RPGCharacter -> {
+                Log.d("CV", "Creating view for RPG character")
+                setContentView(R.layout.activity_game_character_viewer) // Temporary, either change to different layout or remove entry
+            }
+            is GameCharacter -> {
+                Log.d("CV", "Creating view for game character")
+                setContentView(R.layout.activity_game_character_viewer)
+            }
+            else -> {
+                Log.d("CV", "Creating view for standard character")
+                setContentView(R.layout.activity_character_viewer)
+            }
+        }
+
+        Log.d("CV", "Character is game character: ${character is GameCharacter}")
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.bckgr)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-        val charName: String = getIntent().getStringExtra("name")!!
-        character = AppCommons.getCurrentProject()!!.getCharacter(charName)
 
         if (character == null)
         {
@@ -118,13 +140,27 @@ class CharacterViewerActivity : AppCompatActivity()
         saveBtn.setOnClickListener {
             updateCharValues()
 
-            if (!database.updateObject(character))
+            if (database.getCharacter(project, character!!.getName()) == null)
             {
-                Log.e("DB", "Save failed")
+                if (database.addObject(character))
+                {
+                    Log.d("DB", "Save succeeded")
+                }
+                else
+                {
+                    Log.e("DB", "Save failed")
+                }
             }
             else
             {
-                Log.d("DB", "Save succeeded")
+                if (database.updateObject(character))
+                {
+                    Log.d("DB", "Save succeeded")
+                }
+                else
+                {
+                    Log.e("DB", "Save failed")
+                }
             }
         }
 
