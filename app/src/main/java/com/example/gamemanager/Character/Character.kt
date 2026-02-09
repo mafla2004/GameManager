@@ -21,7 +21,7 @@ open class Character(
 
     private var aspect: String = ""
     private var personality: String = ""
-    private var backstory: String = "mutableListOf()  "
+    private var backstory: String = ""
     private var aliases: String = ""                   // Aliases of the character, stored as a string because there's no gain from
     // using a collection
 

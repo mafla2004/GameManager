@@ -24,6 +24,42 @@ class Project(private var Name: String = "New Project", private var Description:
     public fun getItems():              Collection<GameItem>            = items
     public fun getNarrativeElements():  Collection<NarrativeElement>    = narrative
 
+    public fun getCharacter(name: String): Character?
+    {
+        for (e in characters)
+        {
+            if (e.getName().equals(name))
+            {
+                return e
+            }
+        }
+        return null
+    }
+
+    public fun getItem(name: String): GameItem?
+    {
+        for (e in items)
+        {
+            if (e.getName().equals(name))
+            {
+                return e
+            }
+        }
+        return null
+    }
+
+    public fun getNarrativeElement(name: String): NarrativeElement?
+    {
+        for (e in narrative)
+        {
+            if (e.getName().equals(name))
+            {
+                return e
+            }
+        }
+        return null
+    }
+
     // TODO: Maybe for setters introduce an autosave function, or just be lazy AF and have manual save -_- | ADDENDUM: I'm lazy AF
     // SETTERS AND OTHER MODIFIER METHODS
     public fun setName(newName: String)            { Name = newName }

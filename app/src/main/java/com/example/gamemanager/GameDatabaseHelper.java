@@ -61,7 +61,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         // {parent project, name} -> {species, birth, age etc...}
 
         // This table contains the extra information of characters of class GameCharacter, not the information of its subclasses
-        db.execSQL("CREATE TABLE " + GAMC_TABLE + " (prj_name TEXT, name TEXT, max_health INTEGER, PRIMARY KEY (prj_name, name))");
+        db.execSQL("CREATE TABLE " + GAMC_TABLE + " (prj_name TEXT, name TEXT, max_health INTEGER, inv TEXT, PRIMARY KEY (prj_name, name))");
 
         // This table contains the extra information of characters of class RPGCharacter
         db.execSQL("CREATE TABLE " + RPG_TABLE + " (prj_name TEXT, name TEXT, cur_health INTEGER, owner TEXT, PRIMARY KEY (prj_name, name))");
@@ -290,6 +290,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         if (aux_cursor.moveToFirst())
         {
             int maxHealth = aux_cursor.getInt(aux_cursor.getColumnIndexOrThrow("max_health"));
+            String inv = aux_cursor.getString(aux_cursor.getColumnIndexOrThrow("inv"));
 
             aux_cursor.close();
 
@@ -309,6 +310,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             {
                 ret = new GameCharacter(owner, name, species, birth, age, maxHealth);
             }
+
+            ((GameCharacter)ret).setInventory(inv);
         }
         else
         {
@@ -360,6 +363,7 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
         if (cursor.moveToFirst())
         {
             int maxHealth = cursor.getInt(cursor.getColumnIndexOrThrow("max_health"));
+            String inv = cursor.getString(cursor.getColumnIndexOrThrow("inv"));
 
             cursor.close();
 
@@ -379,6 +383,8 @@ public class GameDatabaseHelper extends  SQLiteOpenHelper
             {
                 ret = new GameCharacter(owner, name, species, birth, age, maxHealth);
             }
+
+            ((GameCharacter)ret).setInventory(inv);
         }
         else
         {

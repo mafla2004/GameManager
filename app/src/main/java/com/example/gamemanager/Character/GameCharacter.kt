@@ -15,8 +15,12 @@ open class GameCharacter(
 {
     constructor(ownerProject: Project, name: String, species: String, birth: String, age: String): this(ownerProject, name, species, birth, age, 100)
 
+    private var inventory: String = ""
+
+    public fun getInventory(): String = inventory
     public fun getMaxHealth(): Int = maxHealth
 
+    public fun setInventory(newInv: String) { inventory = newInv }
     public fun setMaxHealth(newMaxHealth: Int) { maxHealth = newMaxHealth }
 
     override fun getTables(): Array<String> = super.getTables() + GameDatabaseHelper.GAMC_TABLE
@@ -25,5 +29,6 @@ open class GameCharacter(
         put("prj_name", getOwnerProject().getName())
         put("name", getName())
         put("max_health", maxHealth)
+        put("inv", inventory)
     }
 }

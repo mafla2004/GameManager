@@ -9,7 +9,7 @@
     tools:context=".Character.CharacterViewerActivity">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/birthHeader"
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -36,14 +36,117 @@
     <ScrollView
         android:id="@+id/mainScroller"
         android:layout_width="409dp"
-        android:layout_height="500dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="675dp"
         android:layout_marginBottom="88dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/characterHeader"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/birthEditor"
+        app:layout_constraintVertical_bias="0.954">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/aliasesHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Aliases:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/aliasEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Aliases here"
+                android:inputType="text"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/aliasesHeader" />
+
+            <TextView
+                android:id="@+id/aspectHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Aspect:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toBottomOf="@id/aliasEditor" />
+
+            <EditText
+                android:id="@+id/aspectEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Aspect here"
+                android:inputType="textMultiLine"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/aspectHeader" />
+
+            <TextView
+                android:id="@+id/persHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Personality:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toBottomOf="@id/aspectEditor" />
+
+            <EditText
+                android:id="@+id/persEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Personality here"
+                android:inputType="textMultiLine"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/persHeader" />
+
+            <TextView
+                android:id="@+id/storyHeader"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="sans-serif-condensed-medium"
+                android:text="Backstory:"
+                android:textColor="@color/lining"
+                app:layout_constraintTop_toBottomOf="@id/persEditor" />
+
+            <EditText
+                android:id="@+id/storyEditor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="sans-serif-condensed"
+                android:hint="Backstory here"
+                android:inputType="textMultiLine"
+                android:textAlignment="textStart"
+                android:textColor="@color/lining"
+                android:textColorHint="@color/lining"
+                android:textSize="14sp"
+                app:layout_constraintTop_toBottomOf="@id/storyHeader" />
+        </LinearLayout>
+
 
     </ScrollView>
 
@@ -96,7 +199,7 @@
         app:layout_constraintTop_toBottomOf="@+id/mainScroller" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/speciesHeader"
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -108,7 +211,7 @@
         app:layout_constraintTop_toBottomOf="@+id/characterHeader" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/ageHeader"
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -134,8 +237,8 @@
         android:textColor="@color/lining"
         android:textColorHint="@color/lining"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="@+id/speciesHeader"
+        app:layout_constraintTop_toBottomOf="@+id/speciesHeader" />
 
     <EditText
         android:id="@+id/birthEditor"
@@ -149,9 +252,9 @@
         android:textColor="@color/lining"
         android:textColorHint="@color/lining"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView4"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintEnd_toEndOf="@+id/birthHeader"
+        app:layout_constraintStart_toStartOf="@+id/birthHeader"
+        app:layout_constraintTop_toBottomOf="@+id/birthHeader" />
 
     <EditText
         android:id="@+id/ageEditor"
@@ -165,7 +268,8 @@
         android:textColor="@color/lining"
         android:textColorHint="@color/lining"
         android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView5"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintEnd_toEndOf="@+id/ageHeader"
+        app:layout_constraintStart_toStartOf="@+id/ageHeader"
+        app:layout_constraintTop_toBottomOf="@+id/ageHeader" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
